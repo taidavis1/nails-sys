@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-nati
 import Color from '../constants/color';
 import Grid from '../constants/layout/grid';
 
-const RenderItem = (props) => {
+const CategoryItem = (props) => {
     return (
         <TouchableOpacity activeOpacity={0.5} style={!props.empty ? styles.item : [styles.item, styles.itemInvisible]}>
             <View>
@@ -18,15 +18,23 @@ const RenderItem = (props) => {
 const styles = StyleSheet.create({
     screen: {},
     item: {
+        height: Dimensions.get('window').width / Grid.numColumns,
         flex: 1,
-        backgroundColor: Color.primary,
+        backgroundColor: Color.secondary,
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 4,
-        height: Dimensions.get('window').width / Grid.numColumns,
+        margin: 6,
+        elevation: 8,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 6,
+        shadowOpacity: 0.25,
+        padding: 20,
+        borderRadius: 10,
     },
     itemInvisible: {
         backgroundColor: 'transparent',
+        shadowColor: 'transparent',
     },
     itemText: {
         color: Color.mainText,
@@ -35,4 +43,4 @@ const styles = StyleSheet.create({
 
 console.log(styles.item.height);
 
-export default RenderItem;
+export default CategoryItem;
