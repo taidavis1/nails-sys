@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 //! API
 import axios from 'axios';
 //! comps
-import RenderItem from '../components/RenderItem';
+import CategoryItem from '../components/CategoryItem';
 //! sass
 import Grid from '../constants/layout/grid';
 
@@ -39,23 +39,22 @@ const CategoryScreen = (props) => {
         return data;
     };
 
-    const renderItemWithEmpty = (itemData) => {
+    const CategoryItemWithEmpty = (itemData) => {
         if (itemData.item.empty === true) {
-            return <RenderItem item={itemData.item} empty={true} />;
+            return <CategoryItem item={itemData.item} empty={true} />;
         }
-        return <RenderItem item={itemData.item} />;
+        return <CategoryItem item={itemData.item} />;
     };
-
+    
     return (
         <View style={styles.screen}>
-            <Text>Hello CategoryScreen</Text>
             <View>
                 <FlatList
                     keyExtractor={(item) => item.id}
                     data={formatData(categories, Grid.numColumns)}
                     // data={categories}
                     style={styles.container}
-                    renderItem={(itemData) => renderItemWithEmpty(itemData)}
+                    renderItem={(itemData) => CategoryItemWithEmpty(itemData)}
                     numColumns={Grid.numColumns}
                 />
             </View>
@@ -66,6 +65,7 @@ const CategoryScreen = (props) => {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
+        padding: 10
     },
     container: {},
 });
