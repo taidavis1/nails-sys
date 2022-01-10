@@ -3,6 +3,9 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 // import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { registerRootComponent } from 'expo';
+
+
 // import useCachedResources from './hooks/useCachedResources';
 //!expo
 import * as Font from 'expo-font';
@@ -53,6 +56,8 @@ const App = () => {
         </NavigationContainer>
     );
 };
+
+registerRootComponent(App);
 
 export default App;
 

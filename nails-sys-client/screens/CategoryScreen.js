@@ -24,7 +24,8 @@ const CategoryScreen = (props) => {
     };
 
     React.useEffect(() => {
-        loadCategories();
+        const unsubscribe = loadCategories();
+        return unsubscribe;
     }, []);
 
     const formatData = (data, numColumns) => {
