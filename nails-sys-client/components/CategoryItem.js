@@ -4,9 +4,12 @@ import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-nati
 import Color from '../constants/color';
 import Grid from '../constants/layout/grid';
 
+
 const CategoryItem = (props) => {
+    const touchHandler = () => {
+    }
     return (
-        <TouchableOpacity activeOpacity={0.5} style={!props.empty ? styles.item : [styles.item, styles.itemInvisible]}>
+        <TouchableOpacity activeOpacity={0.5} style={!props.empty ? styles.item : [styles.item, styles.itemInvisible]} onPress={touchHandler}>
             <View>
                 <Text style={styles.itemText}>{!props.empty && props.item.id && props.item.id}</Text>
                 <Text style={styles.itemText}>{!props.empty && props.item.username && props.item.username}</Text>
@@ -28,7 +31,7 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.35,
         padding: 20,
         borderRadius: 10,
     },
@@ -40,7 +43,5 @@ const styles = StyleSheet.create({
         color: Color.mainText,
     },
 });
-
-console.log(styles.item.height);
 
 export default CategoryItem;

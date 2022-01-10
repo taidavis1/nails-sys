@@ -1,16 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { registerRootComponent } from 'expo';
+
+
 // import useCachedResources from './hooks/useCachedResources';
 //!expo
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
 //! comps
-import HomeScreen from './screens/HomeScreen';
+import MainScreen from './screens/MainScreen';
 import AuthScreen from './screens/AuthScreen';
 import CategoryScreen from './screens/CategoryScreen';
+import HomeScreen from './screens/MainScreen';
+import SettingScreen from './screens/SettingScreen'
 
 const App = () => {
     const [isLoadingComplete, setIsLoadingComplete] = React.useState(false);
@@ -36,18 +42,22 @@ const App = () => {
         return <AppLoading startAsync={() => fetchFonts()} onFinish={() => setIsLoadingComplete(true)} onError={() => console.warn} />;
     }
 
-    const Stack = createNativeStackNavigator();
+    // const Stack = createNativeStackNavigator();
+    const Drawer = createDrawerNavigator();
 
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="Auth" component={AuthScreen} />
-                <Stack.Screen name="Category" component={CategoryScreen} />
-            </Stack.Navigator>
+            <Drawer.Navigator initialRouteName="Main">
+                <Drawer.Screen name="Main" component={MainScreen}/>
+                <Drawer.Screen name="Auth" component={AuthScreen}/>
+                <Drawer.Screen name="Setting" component={SettingScreen}/>
+                <Drawer.Screen name="Category" component={CategoryScreen} />
+            </Drawer.Navigator>
         </NavigationContainer>
     );
 };
+
+registerRootComponent(App);
 
 export default App;
 

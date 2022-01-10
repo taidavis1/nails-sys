@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "nails-sys-client",
-    "slug": "nails-sys-client",
+    "name": "navigation-drawer",
+    "slug": "navigation-drawer",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
