@@ -32,15 +32,15 @@ class product(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
     
-    name_cat = db.Column(db.String(50) , nullable = False)
+    services = db.Column(db.String(50) , nullable = False)
 
-    cat_list = db.Column(db.String(50) , nullable = False)
+    name_cat = db.Column(db.String(50) , nullable = False)
     
-    def __init__ (self , name_cat,  cat_list):
+    def __init__ (self , services,  name_cat):
+        
+        self.services = services
         
         self.name_cat = name_cat
-        
-        self.cat_list = cat_list
         
         
 class categorySchema(marsh.Schema):
@@ -49,14 +49,15 @@ class categorySchema(marsh.Schema):
         
         fields = ('id' , 'name_cat')
         
+class productSchema(marsh.Schema):
+    
+    class Meta:
+        
+        fields = ('id' ,'services' , 'name_cat')
+
 cat_sche = categorySchema(many = True)
 
-        
-# class productSchema(marsh.Schema):
-    
-#     class Meta:
-        
-#         fields = ('id' , 'name_cat')
+pro_sche = productSchema(many = True)
         
 @app.route('/get_data' , methods = ['GET'])
 def get_data():
@@ -68,7 +69,18 @@ def get_data():
     print(list_json)
     
     return jsonify(list_json)
-        
+
+@app.route('/get_data_services/<int:id>' , methods = ['GET'])
+def get_data_services(id):
+    
+    services = product.query.filter_by(cat_id = id).all()
+    
+    list_json = pro_sche.dump(services)
+    
+    print(list_json)
+    
+    return jsonify(list_json)
+            
 ############################
 
 if __name__ == '__main__':
