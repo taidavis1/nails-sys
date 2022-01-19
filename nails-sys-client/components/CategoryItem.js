@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, TouchableOpacity , Alert} from 'react-native';
 //! sass
 import Color from '../constants/color';
 import Grid from '../constants/layout/grid';
 
 const CategoryItem = (props) => {
     return (
-        <TouchableOpacity activeOpacity={0.5} style={!props.empty ? styles.item : [styles.item, styles.itemInvisible]}>
+        <TouchableOpacity onPress = {() => Alert.alert('Button Press')} activeOpacity={0.5} style={!props.empty ? styles.item : [styles.item, styles.itemInvisible]}>
             <View>
                 <Text style={styles.itemText}>{!props.empty && props.item.id && props.item.id}</Text>
                 <Text style={styles.itemText}>{!props.empty && props.item.name_cat && props.item.name_cat}</Text>
