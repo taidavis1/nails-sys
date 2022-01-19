@@ -18,7 +18,7 @@ marsh = Marshmallow(app)
 
 db = SQLAlchemy(app)
 
-class category(db.Model):
+class Category(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
     
@@ -28,21 +28,23 @@ class category(db.Model):
         
         self.name_cat = name_cat
 
-class product(db.Model):
+class Services(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
     
     services = db.Column(db.String(50) , nullable = False)
-
-    name_cat = db.Column(db.String(50) , nullable = False)
     
-    def __init__ (self , services,  name_cat):
+    category = db.relationship('Category' , backref = 'cat')
+
+    name_cat = db.Column(db.Integer , db.ForeignKey('category.id'))
+    
+            
+    def __init__ (self , services, category):
         
         self.services = services
         
-        self.name_cat = name_cat
-        
-        
+        self.category = category
+                
 class categorySchema(marsh.Schema):
     
     class Meta:
@@ -62,7 +64,7 @@ pro_sche = productSchema(many = True)
 @app.route('/get_data' , methods = ['GET'])
 def get_data():
     
-    category_list = category.query.all()
+    category_list = Category.query.all()
     
     list_json = cat_sche.dump(category_list)
     
@@ -70,16 +72,16 @@ def get_data():
     
     return jsonify(list_json)
 
-@app.route('/get_data_services/<int:id>' , methods = ['GET'])
-def get_data_services(id):
+# @app.route('/get_data_services/<int:id>' , methods = ['GET'])
+# def get_data_services(id):
     
-    services = product.query.filter_by(cat_id = id).all()
+#     services = Product.query.filter_by(cat_id = id).all()
     
-    list_json = pro_sche.dump(services)
+#     list_json = pro_sche.dump(services)
     
-    print(list_json)
+#     print(list_json)
     
-    return jsonify(list_json)
+#     return jsonify(list_json)
             
 ############################
 
