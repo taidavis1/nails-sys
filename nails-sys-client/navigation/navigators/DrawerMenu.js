@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import { useWindowDimensions } from 'react-native';
 // import  from './components/globalStyles';
 //! theme
 import theme from '../../themes/Light';
@@ -57,13 +57,32 @@ const DrawerMenu = (props) => {
     //     },
     // ];
     // /* <NavItem icon={<IconHomeOutline style={{ width: 25, height: 25 }} />}>Home</NavItem> */
+    const dimensions = useWindowDimensions();
+    const isLargeScreen = dimensions.width >= 768;
 
     const Drawer = createDrawerNavigator();
 
     return (
-        <View style={{ flex: 1, backgroundColor: theme.colors.boxBackground }}>
+        <View style={{ flex: 1, backgroundColor: theme.colors.white }}>
             <Drawer.Navigator
                 hideStatusBar={true}
+                defaultStatus="open"
+
+                screenOptions={{
+                    drawerStyle: {
+                        width: isLargeScreen ? '35%' : '60%',
+                        backgroundColor: theme.colors.boxBackground,
+                    },
+                    // overlayColor : 1 //! ???
+                    // headerShown: false,
+                    sceneContainerStyle: {
+                        backgroundColor: 'transparent',
+                    },
+                    drawerType: isLargeScreen ? 'permanent' : 'front',
+                    // drawerStyle: isLargeScreen ? null : { width: '60%' },
+                    overlayColor: 'transparent',
+                }}
+                initialRouteName="Services"
                 drawerContent={(props) => {
                     return (
                         <DrawerContent
@@ -74,18 +93,6 @@ const DrawerMenu = (props) => {
                             {...props}
                         />
                     );
-                }}
-                initialRouteName="Services"
-                screenOptions={{
-                    drawerStyle: {
-                        width: '60%',
-                        backgroundColor: theme.colors.boxBackground,
-                    },
-                    // overlayColor : 1 //! ???
-                    // headerShown: false,
-                    sceneContainerStyle: {
-                        backgroundColor: 'transparent',
-                    },
                 }}
             >
                 <Drawer.Screen

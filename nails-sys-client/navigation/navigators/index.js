@@ -4,13 +4,16 @@ import { NavigationContainer } from '@react-navigation/native';
 //! themes
 import theme from '../../themes/Light';
 //! Stack
-import Stack from './Stack';
+// import Stack from './Stack';
+//! Drawer
+import DrawerMenu from './DrawerMenu';
+
 
 const AppNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack />
-            {/* <DrawerMenu /> */}
+            {/* <Stack /> */}
+            <DrawerMenu />
         </NavigationContainer>
     );
 };
