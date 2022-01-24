@@ -19,7 +19,7 @@ const CategoryScreen = (props) => {
     // console.log(`screenHeight: `, screenHeight);
 
     const screenData = useScreenDimensions();
-    const screenWidth = Dimensions.get('screen').width;
+    const screenWidth = Dimensions.get('screen').width * 65 / 100;
 
     const getCategoryData = (screenWidth) => {
         let numColumns = 3;
