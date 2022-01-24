@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-const ShopScreen = (props) => {
+const SignInListScreen = (props) => {
     return (
         <View style={styles.screen}>
-            <Text>ShopScreen</Text>
+            <Text>SignInListScreen</Text>
         </View>
     );
 };
@@ -16,4 +16,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ShopScreen;
+export default SignInListScreen;

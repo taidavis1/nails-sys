@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-const ShopScreen = (props) => {
+const TurnTrackingScreen = (props) => {
     return (
         <View style={styles.screen}>
-            <Text>ShopScreen</Text>
+            <Text>TurnTrackingScreen</Text>
         </View>
     );
 };
@@ -16,4 +16,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ShopScreen;
+export default TurnTrackingScreen;
