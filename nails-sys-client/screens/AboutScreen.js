@@ -4,11 +4,11 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 //! icons
 
 
-const HomeScreen = () => {
+const AboutScreen = (props) => {
     return (
         <TouchableOpacity style={styles.screen}>
             <View >
-                <Text>HomeScreen</Text>
+                <Text>AboutScreen</Text>
             </View>
         </TouchableOpacity>
     );
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HomeScreen;
+export default AboutScreen;

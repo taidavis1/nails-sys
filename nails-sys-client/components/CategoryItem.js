@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 //! sass
 import Colors from '../constants/color';
-import Grid from '../constants/layout/grid';
 
 const CategoryItem = ({ item, empty, style }) => {
     const touchHandler = () => {};
