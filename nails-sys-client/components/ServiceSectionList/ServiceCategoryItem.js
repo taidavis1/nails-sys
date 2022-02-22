@@ -7,10 +7,10 @@ import theme from '../../themes/Light';
 //!
 
 const ServiceCategoryItem = (props) => {
-    const { style, navigation, indexColor, serviceCategory } = props;
+    const { style, navigation, colorIndex, serviceCategory } = props;
     // console.log(`ServiceCategoryItem-serviceCategory: `, serviceCategory);
     const handleTouch = () => {
-        navigation.navigate('ServicecCategoryDetails', { _id: serviceCategory._id, indexColor: indexColor });
+        navigation.navigate('ServicecCategoryDetails', { _id: serviceCategory._id, colorIndex: colorIndex });
     };
 
     const styles = {
@@ -19,7 +19,7 @@ const ServiceCategoryItem = (props) => {
             width: ((Dimensions.get('window').width * 65) / 100 - 50) / 4,
             height: ((Dimensions.get('window').width * 45) / 100 - 50) / 4,
             // flex: 1,
-            backgroundColor: theme.colors.serviceCategory[indexColor],
+            backgroundColor: theme.colors.serviceCategory[colorIndex],
             alignItems: 'center',
             justifyContent: 'center',
             margin: 5,

@@ -84,8 +84,8 @@ const ServicesScreen = (props) => {
         <View style={styles.container}>
             <ScrollView horizontal={true} style={styles.content}>
                 {serviceCategories?.map((serviceCategory, index) => {
-                    let indexColor = Number(index.toString().slice(-1));
-                    return <ServiceSectionList key={index} indexColor={indexColor} serviceCategory={serviceCategory} navigation={navigation} />;
+                    let colorIndex = Number(index.toString().slice(-1));
+                    return <ServiceSectionList key={index} colorIndex={colorIndex} serviceCategory={serviceCategory} navigation={navigation} />;
                 })}
             </ScrollView>
         </View>

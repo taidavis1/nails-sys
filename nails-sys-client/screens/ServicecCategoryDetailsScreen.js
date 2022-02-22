@@ -12,7 +12,7 @@ import { getServiceCategoriesAsync } from '../redux/slices/services/servicesSlic
 
 const ServicecCategoryDetailsScreen = (props) => {
     const { navigation, route, getServiceCategoriesAsync, serviceCategories, setModalProps } = props;
-    const { indexColor } = route.params;
+    const { colorIndex } = route.params;
 
     const [buttonWidth, setButtonWidth] = React.useState(((Dimensions.get('window').width * 65) / 100 - 50) / 4);
     const [numColumns, setNumColumns] = React.useState(4);
@@ -58,7 +58,7 @@ const ServicecCategoryDetailsScreen = (props) => {
         if (serviceData.item.empty === true) {
             return <ServiceItem service={serviceData.item} empty={true} />;
         }
-        return <ServiceItem indexColor={indexColor} service={serviceData.item} navigation={navigation} />;
+        return <ServiceItem colorIndex={colorIndex} service={serviceData.item} navigation={navigation} />;
     };
 
     return (
@@ -93,3 +93,5 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicecCategoryDetailsScreen);
+
+//! anh bấm A vì a dùng Android giả lập, nhà nghèo mà, chấm chậm load lâu lắm

@@ -9,7 +9,7 @@ import ServiceCategoryItem from './ServiceCategoryItem';
 import ServiceItem from './ServiceItem';
 
 const ServiceSectionList = (props) => {
-    const { navigation, route, indexColor, serviceCategory } = props;
+    const { navigation, route, colorIndex, serviceCategory } = props;
 
     const isMounted = React.useRef(true);
     const [categories, setCategories] = React.useState([]);
@@ -23,11 +23,11 @@ const ServiceSectionList = (props) => {
     }, []);
 
     const ServiceList = () =>
-        serviceCategory.services.slice(0, serviceCount).map((service) => <ServiceItem key={service._id} indexColor={indexColor} service={service} navigation={navigation} />);
+        serviceCategory.services.slice(0, serviceCount).map((service) => <ServiceItem key={service._id} colorIndex={colorIndex} service={service} navigation={navigation} />);
 
     return (
         <View style={styles.container}>
-            <ServiceCategoryItem style={styles.category} indexColor={indexColor} serviceCategory={serviceCategory} navigation={navigation} route={route} />
+            <ServiceCategoryItem style={styles.category} colorIndex={colorIndex} serviceCategory={serviceCategory} navigation={navigation} route={route} />
             <ServiceList />
         </View>
     );
