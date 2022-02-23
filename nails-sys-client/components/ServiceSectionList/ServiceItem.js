@@ -7,7 +7,7 @@ import theme from '../../themes/Light';
 //!
 
 const ServiceItem = (props) => {
-    const { style, navigation, service, colorIndex, empty } = props;
+    const { style, navigation, service, colorIndex, empty, ServiceItem, onLongPress } = props;
     // console.log(`ServiceCategoryItem-serviceCategory: `, serviceCategory);
     const handleTouch = () => {
         navigation.navigate('ServicecDetails', { service: service, colorIndex: colorIndex });
@@ -43,6 +43,7 @@ const ServiceItem = (props) => {
     return (
         <TouchableOpacity
             activeOpacity={0.5}
+            onLongPress={onLongPress}
             onPress={() => handleTouch()}
             style={empty ? { ...styles.itemInvisible, ...style } : { ...styles.item, ...style }}
         >

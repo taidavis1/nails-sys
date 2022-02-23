@@ -1,8 +1,6 @@
 import { StyleSheet, Dimensions, View, Text, FlatList } from 'react-native';
 import React from 'react';
 import { connect } from 'react-redux';
-// import { useDispatch, useSelector } from 'react-redux';
-
 //! imp Comps
 import ServiceItem from '../components/ServiceSectionList/ServiceItem';
 
@@ -28,9 +26,9 @@ const ServicecCategoryDetailsScreen = (props) => {
         // console.log(`ServicecCategoryDetailsScreen - serviceCategories: `, serviceCategories);
     }, []);
 
-    const selectedServiceCategory = serviceCategories.find(sc => sc._id === route.params?._id)
-        //!__DEBUG
-        // console.log(`ServicecCategoryDetailsScreen - selectedServiceCategory: `, selectedServiceCategory.services)
+    const selectedServiceCategory = serviceCategories.find((sc) => sc._id === route.params?._id);
+    //!__DEBUG
+    // console.log(`ServicecCategoryDetailsScreen - selectedServiceCategory: `, selectedServiceCategory.services)
     const services = selectedServiceCategory.services;
 
     const formatData = (data, numColumns) => {
@@ -53,12 +51,20 @@ const ServicecCategoryDetailsScreen = (props) => {
         return data;
     };
 
+    // const openModal = () => {
+    //     console.log(`bottomSheetRef.current.present();`)
+    //     bottomSheetRef.current.present();
+    // };
+    const openModal = () => {
+        console.log(`onLongPress`);
+        bottomSheetRef.current?.present();
+    };
 
     const ServiceItemWithEmpty = (serviceData) => {
         if (serviceData.item.empty === true) {
             return <ServiceItem service={serviceData.item} empty={true} />;
         }
-        return <ServiceItem colorIndex={colorIndex} service={serviceData.item} navigation={navigation} />;
+        return <ServiceItem colorIndex={colorIndex} service={serviceData.item} navigation={navigation} onLongPress={openModal} />;
     };
 
     return (
@@ -79,6 +85,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    sheetContainer: {
+        // add horizontal space
+        marginHorizontal: 24,
+    },
 });
 
 const mapStateToProps = (state) => {
@@ -93,5 +103,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicecCategoryDetailsScreen);
-
-//! anh bấm A vì a dùng Android giả lập, nhà nghèo mà, chấm chậm load lâu lắm

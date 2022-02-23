@@ -12,6 +12,7 @@
         "devtools": "react-devtools"
     },
     "dependencies": {
+        "@gorhom/bottom-sheet": "^4",
         "@react-native-community/masked-view": "^0.1.11",
         "@react-navigation/drawer": "^6.1.8",
         "@react-navigation/native": "^6.0.6",
