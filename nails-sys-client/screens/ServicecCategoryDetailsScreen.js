@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 //! imp Comps
 import ServiceItem from '../components/ServiceSectionList/ServiceItem';
-import EditServiceBottomSheet from '../components/BottomSheet/EditServiceBottomSheet';
+import EditServiceBottomSheet from '../components/Modal/EditServiceBottomSheet';
 
 //! imp Actions
 import { setModalProps } from '../redux/slices/modal/modalSlice';
@@ -12,16 +12,32 @@ import { getServiceCategoriesAsync } from '../redux/slices/services/servicesSlic
 
 const ServicecCategoryDetailsScreen = (props) => {
     const { navigation, route, getServiceCategoriesAsync, serviceCategories, setModalProps } = props;
+    
     const { colorIndex } = route.params;
     const [isOpen, setIsOpen] = React.useState(false);
     const [buttonWidth, setButtonWidth] = React.useState(((Dimensions.get('window').width * 65) / 100 - 50) / 4);
     const [numColumns, setNumColumns] = React.useState(4);
+    
     //! Response
+    const screenWidth = Dimensions.get('window').width;
+    var snapPointValue = '35%';
 
+    if (screenWidth >= 768) {
+        //! Tablet >= 768
+        if (screenWidth >= 768) {
+            //! Tablet >= 768
+            snapPointValue = '75%';
+        }
+    }
 
     //__ DEBUG
     // console.log(`ServicecCategoryDetailsScreen - route.params?._id`, route.params?._id)
     // console.log(`ServicecCategoryDetailsScreen - route: `, route);
+
+
+
+    React.useEffect(() => {
+    }, []);
 
     React.useEffect(() => {
         getServiceCategoriesAsync();
@@ -29,8 +45,6 @@ const ServicecCategoryDetailsScreen = (props) => {
         //!__DEBUG
         // console.log(`ServicecCategoryDetailsScreen - serviceCategories: `, serviceCategories);
     }, []);
-
-
 
     const selectedServiceCategory = serviceCategories.find((sc) => sc._id === route.params?._id);
     //!__DEBUG
@@ -57,7 +71,24 @@ const ServicecCategoryDetailsScreen = (props) => {
         return data;
     };
 
-    const handleExpand = () => ;
+    // ref
+    const bottomSheetRef = React.useRef(null);
+
+    // variables
+    const snapPoints = React.useMemo(() => [snapPointValue], []);
+
+    // callbacks
+    const handleSheetChanges = React.useCallback((index) => {
+        console.log('handleSheetChanges', index);
+    }, []);
+
+    // callbacks
+    const handleExpand = React.useCallback(() => {
+        bottomSheetRef.current?.expand();
+    }, []);
+    const handleClose = React.useCallback(() => {
+        bottomSheetRef.current?.close();
+    }, []);
 
     const handleEditService = () => {
         console.log(`onLongPress`);
@@ -67,7 +98,7 @@ const ServicecCategoryDetailsScreen = (props) => {
         if (serviceData.item.empty === true) {
             return <ServiceItem service={serviceData.item} empty={true} />;
         }
-        return <ServiceItem colorIndex={colorIndex} service={serviceData.item} navigation={navigation} onLongPress={handleEditService} />;
+        return <ServiceItem colorIndex={colorIndex} service={serviceData.item} navigation={navigation} onLongPress={handleExpand} />;
     };
 
     return (
@@ -80,9 +111,8 @@ const ServicecCategoryDetailsScreen = (props) => {
                 renderItem={(serviceData) => ServiceItemWithEmpty(serviceData)}
                 numColumns={numColumns}
             />
-            {isOpen ? <View style={styles.backdrop}></View> : null}
 
-            <EditServiceBottomSheet bottomSheetRef={bottomSheetRef} snapPoints={snapPoints} onChange={handleSheetChanges} onClose={onClose} />
+            <EditServiceBottomSheet bottomSheetRef={bottomSheetRef} snapPoints={snapPoints} onChange={handleSheetChanges} onPress={handleClose}/>
         </View>
     );
 };
@@ -94,14 +124,6 @@ const styles = StyleSheet.create({
     sheetContainer: {
         // add horizontal space
         marginHorizontal: 24,
-    },
-    backdrop: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        flex: 1,
-        backgroundColor: 'grey',
-        opacity: 0.5,
     },
 });
 

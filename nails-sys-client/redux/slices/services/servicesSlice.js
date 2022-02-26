@@ -119,7 +119,7 @@ const servicesSlice = createSlice({
             // console.log(`action.payload: `, action.payload);
 
             const selectedServiceCategory = state.serviceCategories.find(sc => sc._id === action.payload.category)
-            selectedServiceCategory.services.push(action.payload);
+            selectedServiceCategory?.services.push(action.payload);
 
             // state.serviceCategories.forEach((serviceCategory) => {
             //     console.log(`serviceCategory._id: `, serviceCategory._id);

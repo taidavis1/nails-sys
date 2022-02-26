@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { setModalProps } from '../../redux/slices/modal/modalSlice';
 
 //! theme
 import theme from '../../themes/Light';
@@ -7,10 +9,15 @@ import theme from '../../themes/Light';
 //!
 
 const ServiceItem = (props) => {
-    const { style, navigation, service, colorIndex, empty, ServiceItem, onLongPress } = props;
+    const { style, navigation, service, colorIndex, empty, onLongPress, setModalProps } = props;
     // console.log(`ServiceCategoryItem-serviceCategory: `, serviceCategory);
     const handleTouch = () => {
-        navigation.navigate('ServicecDetails', { service: service, colorIndex: colorIndex });
+        navigation?.navigate('ServicecDetails', { service: service, colorIndex: colorIndex });
+    };
+
+    const handleLongPress = () => {
+        onLongPress(); //! implement out-function
+        setModalProps(service);
     };
 
     const styles = {
@@ -43,7 +50,7 @@ const ServiceItem = (props) => {
     return (
         <TouchableOpacity
             activeOpacity={0.5}
-            onLongPress={onLongPress}
+            onLongPress={handleLongPress}
             onPress={() => handleTouch()}
             style={empty ? { ...styles.itemInvisible, ...style } : { ...styles.item, ...style }}
         >
@@ -55,30 +62,15 @@ const ServiceItem = (props) => {
     );
 };
 
-// const styles = StyleSheet.create({
-//     screen: {},
-//     item: {
-//         height: Dimensions.get('window').width / Grid.numColumns,
-//         flex: 1,
-//         backgroundColor: Color.secondary,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         margin: 6,
-//         elevation: 8,
-//         shadowColor: 'black',
-//         shadowOffset: { width: 0, height: 2 },
-//         shadowRadius: 6,
-//         shadowOpacity: 0.35,
-//         padding: 20,
-//         borderRadius: 10,
-//     },
-//     itemInvisible: {
-//         backgroundColor: 'transparent',
-//         shadowColor: 'transparent',
-//     },
-//     itemText: {
-//         color: Color.mainText,
-//     },
-// });
+const mapStateToProps = (state) => {
+    return {
+        // serviceCategories: state.service.serviceCategories,
+    };
+};
 
-export default ServiceItem;
+const mapDispatchToProps = {
+    setModalProps,
+    // getServiceCategoriesAsync,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceItem);
