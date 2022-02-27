@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, Dimensions, Button, Alert } from 'react-native';
 import React from 'react';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import IconQuit from '../../assets/icons/IconQuit';
 //! theme
@@ -9,13 +9,10 @@ import theme from '../../themes/Light';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const EditServiceBottomSheet = React.forwardRef((props, ref) => {
-    const { onPress } = props;
+    const { onPress, modalProps } = props;
 
-    const dispatch = useDispatch();
-    const { modalProps } = useSelector((state) => state.modal);
-    // const [name, setName] = React.useState('');
+    const [name, setName] = React.useState('');
 
-    console.log(`EditServiceBottomSheet - modalProps: `, modalProps);
     const screenWidth = Dimensions.get('window').width;
 
     //! Response
@@ -53,13 +50,11 @@ const EditServiceBottomSheet = React.forwardRef((props, ref) => {
         bottomSheetRef.current.expand();
     };
 
-    const handleClose = () => {
-        bottomSheetRef.current.close();
-    };
-
     React.useImperativeHandle(ref, () => {
         return {
-            expand: handleExpand,
+            expand: () => {
+                console.log('Input is in focus');
+            },
         };
     });
 
@@ -96,20 +91,20 @@ const EditServiceBottomSheet = React.forwardRef((props, ref) => {
             style={[styles.sheetContainer, sheetStyles]}
         >
             <View style={styles.contentContainer}>
-                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 10 }} onPress={handleClose}>
+                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 10 }} onPress={onPress}>
                     <IconQuit sizeIcon={20} theme={theme} />
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row', marginBottom: 10 }}>
                     <Text style={{ fontSize: 20 }}>Service: </Text>
-                    <Text style={{ fontSize: 20 }}>{modalProps?.serviceName}</Text>
+                    <Text style={{ fontSize: 20 }}>{modalProps?.name}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginBottom: 10 }}>
                     <Text style={{ fontSize: 20 }}>Price: </Text>
-                    <Text style={{ fontSize: 20 }}>{modalProps?.servicePrice}</Text>
+                    <Text style={{ fontSize: 20 }}>{modalProps?.price}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginBottom: 10 }}>
                     <Text style={{ fontSize: 20 }}>Content: </Text>
-                    <Text style={{ fontSize: 20 }}>{modalProps?.serviceContent}</Text>
+                    <Text style={{ fontSize: 20 }}>{modalProps?.content}</Text>
                 </View>
                 <View style={styles.button}>
                     <Button title="Edit Service" onPress={() => console.log(`Edit Service`)} />
@@ -139,16 +134,16 @@ const styles = StyleSheet.create({
     },
 });
 
-// const mapStateToProps = (state) => {
-//     return {
-//         // serviceCategories: state.service.serviceCategories,
-//         modalProps: state.modal.modalProps,
-//     };
-// };
+const mapStateToProps = (state) => {
+    return {
+        // serviceCategories: state.service.serviceCategories,
+        modalProps: state.modal.modalProps,
+    };
+};
 
-// const mapDispatchToProps = {
-//     // setModalProps,
-//     // getServiceCategoriesAsync,
-// };
+const mapDispatchToProps = {
+    // setModalProps,
+    // getServiceCategoriesAsync,
+};
 
-export default EditServiceBottomSheet;
+export default connect(mapStateToProps, mapDispatchToProps, { forwardRef: true })(EditServiceBottomSheet);

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    id: null, //! id-Modal
+    modalId: null, //! id-Modal
     modalProps: {},
 };
 // |-modalProps
@@ -14,7 +14,7 @@ const modalSlice = createSlice({
         showModal(state, action) {
             return {
                 ...state,
-                id: action.payload.id,
+                modalId: action.payload.modalId,
                 modalProps: { ...state.modalProps, ...action.payload.modalProps },
             };
             // state.id = action.payload.id;
@@ -22,7 +22,7 @@ const modalSlice = createSlice({
         },
         hideModal(state, action) {
             // return initialState;
-            state.id = initialState.id;
+            state.modalId = initialState.modalId;
         },
         setModalProps(state, action) {
             state.modalProps = action.payload;

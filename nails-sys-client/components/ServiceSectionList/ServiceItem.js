@@ -17,7 +17,14 @@ const ServiceItem = (props) => {
 
     const handleLongPress = () => {
         onLongPress(); //! implement out-function
-        setModalProps(service);
+        // setModalProps(service);
+        setModalProps({
+            serviceCategoryId: service.category,
+            serviceId: service._id,
+            serviceName: service.name,
+            servicePrice: service.price,
+            serviceContent: service.content,
+        })
     };
 
     const styles = {

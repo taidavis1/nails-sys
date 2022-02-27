@@ -102,9 +102,51 @@ const createService = async (req, res, next) => {
     }
 };
 
+const deleteService = async (req, res, next) => {
+    try {
+        const { serviceCategoryId, servicesId } = req.params;
+
+        
+
+        /*
+        // console.log(`servicesController - id: `, serviceCategoryId);
+        const existService = await Service.findOne({ name });
+        if (existService) {
+            console.log('ERROR servicesController.createService');
+            return res.status(400).json({ errorMessage: `Service - ${name} already exists!` });
+        }
+
+        //! CREATE - Serivce
+        var service = new Service();
+        service.name = name;
+        service.price = price;
+        service.content = content;
+        service.category = category;
+        service = await service.save();
+
+        //! UPDATE - Service Category
+        await ServiceCategory.findByIdAndUpdate(category, { $push: { services: service._id } }, { new: true });
+
+        res.status(200).json({
+            service,
+            successMessage: `Service ${service.name} created successfully!`,
+        });
+
+        // const newServiceCategory = ServiceCategory.create(serviceCategory);
+        console.log('SUCCESS servicesController.createService: ', service);
+    */
+    } catch (error) {
+        res.status(500).json({
+            errorMessage: 'Please try again next time',
+        });
+        console.log('ERROR servicesController.createService: ', error);
+    }
+};
+
 module.exports = {
     getAllServiceCategories,
     getServicesWithCategory,
     createServiceCategory,
     createService,
+    deleteService,
 };

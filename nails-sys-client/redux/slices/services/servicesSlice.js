@@ -64,6 +64,23 @@ export const addServiceAsync = createAsyncThunk('services/addServiceSync', async
     }
 });
 
+export const removeServiceAsync = createAsyncThunk('services/removeServiceAsync', async (payload, { getState }) => {
+    const { serviceCategoryId, serviceId } = getState().modal.modalProps;
+
+    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}/${serviceId}`), {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serviceId }),
+    });
+
+    if (response.ok) {
+        const { service } = await response.json();
+        return service; //! return Array
+    }
+});
+
 const initialState = {
     isLoading: false,
     error: false,
@@ -114,25 +131,11 @@ const servicesSlice = createSlice({
             // state.serviceCategories.push(action.payload.serviceCategory);
             //! return Object { "__v": 0, "_id": "62130b59981157099d3069e4", "category": "6210f603b91ea1b46ad611be", "content": "",
             //! "createdAt": "2022-02-21T03:47:37.260Z", "name": "222", "price": 50, "updatedAt": "2022-02-21T03:47:37.260Z",}
-            
+
             //!___DEBUG
             // console.log(`action.payload: `, action.payload);
-
-            const selectedServiceCategory = state.serviceCategories.find(sc => sc._id === action.payload.category)
+            const selectedServiceCategory = state.serviceCategories.find((sc) => sc._id === action.payload.category);
             selectedServiceCategory?.services.push(action.payload);
-
-            // state.serviceCategories.forEach((serviceCategory) => {
-            //     console.log(`serviceCategory._id: `, serviceCategory._id);
-            //     if (serviceCategory._id === action.payload.category) {
-            //         //!___DEBUG
-            //         serviceCategory.services.push(action.payload);
-            //     }
-            // });
-
-            // return {
-            //     ...state,
-            //     services: [...state.services, action.payload],
-            // };
         });
     },
 });
