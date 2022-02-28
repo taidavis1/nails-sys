@@ -14,5 +14,7 @@ router.post('/', servicesController.createServiceCategory);
 router.get('/:serviceCategoryId', servicesController.getServicesWithCategory);
 //! Create a Service within Category
 router.post('/:serviceCategoryId', servicesController.createService);
+//! Delete a Service within Category
+router.delete('/:serviceCategoryId/:serviceId', servicesController.deleteService);
 
 module.exports = router;

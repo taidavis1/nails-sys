@@ -80,6 +80,10 @@ const EditServiceBottomSheet = React.forwardRef((props, ref) => {
             // Does nothing but dismiss the dialog when tapped
             {
                 text: 'No',
+                onPress: () => {
+                    console.log(`No`);
+                    bottomSheetRef.current.expand();
+                },
             },
         ]);
     };
@@ -118,6 +122,7 @@ const EditServiceBottomSheet = React.forwardRef((props, ref) => {
                     <Button
                         title="Remove Service"
                         onPress={() => {
+                            bottomSheetRef.current.close();
                             showConfirmDialog();
                         }}
                     />

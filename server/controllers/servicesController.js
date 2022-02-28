@@ -19,11 +19,11 @@ const getServicesWithCategory = async (req, res, next) => {
     const { serviceCategoryId } = req.params;
     console.log(`servicesController - serviceCategoryId: `, serviceCategoryId);
     try {
-        const servicesCategory = await ServiceCategory.find({ _id: serviceCategoryId }).populate({ path: 'services', model: 'Service' });
+        const servicesCategory = await ServiceCategory.findById({ _id: serviceCategoryId }).populate({ path: 'services', model: 'Service' });
         // const services = await ServiceCategory.find({ _id: serviceCategoryId });
         const services = servicesCategory[0].services;
         console.log('SUCCESS servicesController - getServicesWithCategory: ', services);
-        res.status(200).json( { services } ); //! return -> Action payload
+        res.status(200).json({ services }); //! return -> Action payload
     } catch (error) {
         console.log('ERROR servicesController - getServicesWithCategory: ', error);
         res.status(500).json({
@@ -104,9 +104,23 @@ const createService = async (req, res, next) => {
 
 const deleteService = async (req, res, next) => {
     try {
-        const { serviceCategoryId, servicesId } = req.params;
+        const { serviceCategoryId, serviceId } = req.params;
+        console.log(`serviceController - deleteService - serviceCategoryId: `, serviceCategoryId);
+        console.log(`serviceController - deleteService - serviceId: `, serviceId);
 
+        const service = await Service.findById(serviceId);
+        console.log(`serviceController - deleteService - service: `, service);
+        if (!service) {
+            //! lỗi
+        }
         
+
+        // const removeService = await service.remove();
+        // console.log(`serviceController - deleteService - removeService: `, removeService);
+
+        // await ServiceCategory.updateMany({ _id: service.category }, { $pull: { products: product._id } });
+
+        // return res.redirect(product);
 
         /*
         // console.log(`servicesController - id: `, serviceCategoryId);
