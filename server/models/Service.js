@@ -10,14 +10,14 @@ const ServiceSchema = mongoose.Schema(
             type: Number,
             required: true,
         },
-        content: {
+        description: {
             type: String,
             required: false,
         },
         category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'ServiceCategory',
-            // required: true,
+            required: true,
         },
     },
     { timestamps: true }

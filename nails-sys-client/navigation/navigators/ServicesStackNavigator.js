@@ -22,7 +22,7 @@ import IconAddOutline from '../../assets/icons/IconAddOutline';
 const Stack = createStackNavigator();
 
 const ServicesStackNavigator = (props) => {
-    const { id, showModal, hideModal, navigation, route } = props;
+    const { navigation, route, modalId, showModal, hideModal } = props;
     // console.log(`ServicesStackNavigator - route: `, route);
 
     return (
@@ -39,7 +39,7 @@ const ServicesStackNavigator = (props) => {
                                 style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center' }}
                                 onPress={() => {
                                     console.log(`ServicesStack - CREATE_SERVICE_CATEGORY_MODAL`);
-                                    showModal({ id: 'CREATE_SERVICE_CATEGORY_MODAL' });
+                                    showModal({ modalId: 'CREATE_SERVICE_CATEGORY_MODAL' });
                                 }}
                             >
                                 <IconAddOutline sizeIcon={24} theme={theme} />
@@ -61,7 +61,7 @@ const ServicesStackNavigator = (props) => {
                                 style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center' }}
                                 onPress={() => {
                                     console.log(`ServicesStack - CREATE_SERVICE_MODAL`);
-                                    showModal({ id: 'CREATE_SERVICE_MODAL' });
+                                    showModal({ modalId: 'CREATE_SERVICE_MODAL' });
                                 }}
                             >
                                 <IconAddServiceOutline sizeIcon={24} theme={theme} />
@@ -87,7 +87,7 @@ const ServicesStackNavigator = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        id: state.modal.id,
+        modalId: state.modal.modalId,
     };
 };
 

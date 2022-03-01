@@ -9,29 +9,30 @@ import { showModal, hideModal } from '../../redux/slices/modal/modalSlice';
 //! imp Modals
 import CreateServiceCategoryModal from './CreateServiceCategoryModal';
 import CreateServiceModal from './CreateServiceModal';
+import EditServiceModal from './EditServiceModal';
 
 const RootModal = (props) => {
-    const { id, showModal, hideModal } = props;
-    console.log(`Modal - id: `, Boolean(id));
+    const { modalId, showModal, hideModal } = props;
 
     const MODAL_COMPONENTS = {
         CREATE_SERVICE_CATEGORY_MODAL: CreateServiceCategoryModal,
         CREATE_SERVICE_MODAL: CreateServiceModal,
+        EDIT_SERVICE_MODAL: EditServiceModal,
     };
 
     //! no Id in store
     //! assign a constant that is either one of our custom views or a noop function if the id is not set
     //! if no set id empty const ModalView = MODAL_COMPONENTS[id] || function () {};
 
-    if (!id) {
+    if (!modalId) {
         return null;
     }
 
-    const ModalView = MODAL_COMPONENTS[id];
+    const ModalView = MODAL_COMPONENTS[modalId];
 
     //! show the Modal if the id is set to a truthy value
     return (
-        <Modal visible={Boolean(id)} animationType="fade" testID="modals" transparent={true}>
+        <Modal visible={Boolean(modalId)} animationType="fade" testID="modals" transparent={true}>
             <View style={styles.container}>
                 <ModalView />
             </View>
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        id: state.modal.id,
+        modalId: state.modal.modalId,
     };
 };
 

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { PlatformBaseUrl } from '../../../utils';
 
-//! ServiceCategory
+//! GET ServiceCategory
 export const getServiceCategoriesAsync = createAsyncThunk('services/getServiceCategoriesAsync', async () => {
     const response = await fetch(PlatformBaseUrl.baseApiUrl('/api/services'));
     if (response.ok) {
@@ -12,6 +12,7 @@ export const getServiceCategoriesAsync = createAsyncThunk('services/getServiceCa
     }
 });
 
+//! CREATE ServiceCategory
 export const addServiceCategoryAsync = createAsyncThunk('services/addServiceCategoryAsync', async (payload) => {
     // console.log(`servicesSlice - addServiceCategoryAsync: `, payload);
     const response = await fetch(PlatformBaseUrl.baseApiUrl('/api/services'), {
@@ -29,33 +30,19 @@ export const addServiceCategoryAsync = createAsyncThunk('services/addServiceCate
     }
 });
 
-//! getServiceAsync(:serviceCategoryId)
-export const getServicesWithCategoryAsync = createAsyncThunk('services/getServicesWithCategoryAsync', async (payload, { getState }) => {
-    // const  serviceCategoryId  = getState().service.serviceCategory.id;
+//! CREATE Service
+export const addServiceAsync = createAsyncThunk('services/addServiceAsync', async (payload, { getState }) => {
+    const { serviceCategoryId } = getState().modal.modalProps; //! OK
 
-    // console.log(`servicesSlice - getState().service.serviceCategory: `, serviceCategoryId);
-    // console.log(`servicesSlice - id payload: `, payload);
-
-    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${payload}`));
-
-    if (response.ok) {
-        // const {categories} = await response.json();
-        // return categories; // payload Action
-        const { services } = await response.json();
-        return services; // payload Action
-    }
-});
-
-//! Service
-export const addServiceAsync = createAsyncThunk('services/addServiceSync', async (payload, { getState }) => {
-    const { serviceCategoryId } = getState().modal.modalProps;
+    // console.log(`servicesSlice - serviceCategoryId : `, serviceCategoryId);
+    // console.log(`servicesSlice - payload: `, payload);
 
     const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}`), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: payload.name, price: payload.price, content: payload.content, category: serviceCategoryId }),
+        body: JSON.stringify({ name: payload.name, price: payload.price, description: payload.description }),
     });
 
     if (response.ok) {
@@ -64,6 +51,7 @@ export const addServiceAsync = createAsyncThunk('services/addServiceSync', async
     }
 });
 
+//! DELETE Service
 export const removeServiceAsync = createAsyncThunk('services/removeServiceAsync', async (payload, { getState }) => {
     const { serviceCategoryId, serviceId } = getState().modal.modalProps;
 
@@ -104,7 +92,7 @@ const servicesSlice = createSlice({
             };
         });
         builder.addCase(addServiceCategoryAsync.fulfilled, (state, action) => {
-            console.log('addServiceCategoryAsync successfully');
+            console.log('addServiceCategoryAsync fulfilled');
             // state.serviceCategories.push(action.payload.serviceCategory);
             // console.log(`action.payload: `, action.payload);
             return {
@@ -112,30 +100,41 @@ const servicesSlice = createSlice({
                 serviceCategories: [...state.serviceCategories, action.payload],
             };
         });
-        builder.addCase(getServicesWithCategoryAsync.pending, (state, action) => {
-            console.log('getServicesWithCategoryAsync pending');
-            return {
-                ...state,
-                // services: [],
-            };
-        });
-        builder.addCase(getServicesWithCategoryAsync.fulfilled, (state, action) => {
-            console.log('getServicesWithCategoryAsync fulfilled');
-            return {
-                ...state,
-                services: action.payload,
-            };
+        builder.addCase(addServiceAsync.pending, (state, action) => {
+            console.log('addServiceAsync pending');
         });
         builder.addCase(addServiceAsync.fulfilled, (state, action) => {
-            console.log('addServiceAsync successfully');
-            // state.serviceCategories.push(action.payload.serviceCategory);
-            //! return Object { "__v": 0, "_id": "62130b59981157099d3069e4", "category": "6210f603b91ea1b46ad611be", "content": "",
-            //! "createdAt": "2022-02-21T03:47:37.260Z", "name": "222", "price": 50, "updatedAt": "2022-02-21T03:47:37.260Z",}
+            console.log('addServiceAsync fulfilled');
+            // state.serviceCategories.push(action.payload.serviceCategory)
 
             //!___DEBUG
             // console.log(`action.payload: `, action.payload);
+            //! ???? ANCHOR
             const selectedServiceCategory = state.serviceCategories.find((sc) => sc._id === action.payload.category);
             selectedServiceCategory?.services.push(action.payload);
+        });
+        builder.addCase(removeServiceAsync.pending, (state, action) => {
+            console.log('removeServiceAsync pending');
+        });
+        builder.addCase(removeServiceAsync.fulfilled, (state, action) => {
+            //! action.payload -> serviceRemoved | { name, price, description }
+            //! XEM LAI ANCHOR
+            const selectedServiceCategory = state.serviceCategories.find((sc) => {
+                console.log(`sc._id: `, sc._id);
+                console.log(`action.payload.category: `, action.payload.category);
+                return sc._id === action.payload.category;
+            });
+            console.log(`selectedServiceCategory 1: `, selectedServiceCategory);
+            selectedServiceCategory.services.filter((service) => service._id != action.payload._id);
+            console.log(`selectedServiceCategory 2: `, selectedServiceCategory);
+
+
+            return {
+                ...state,
+                serviceCategories: [...state.serviceCategories, selectedServiceCategory],
+            };
+
+            console.log('removeServiceAsync fulfilled');
         });
     },
 });

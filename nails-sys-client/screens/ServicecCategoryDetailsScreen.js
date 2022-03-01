@@ -1,10 +1,9 @@
 import React from 'react';
-import { StyleSheet, Dimensions, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
 //! imp Comps
 import ServiceItem from '../components/ServiceSectionList/ServiceItem';
-import EditServiceBottomSheet from '../components/Modal/EditServiceBottomSheet';
 
 //! imp Actions
 import { setModalProps } from '../redux/slices/modal/modalSlice';
@@ -14,7 +13,6 @@ const ServicecCategoryDetailsScreen = (props) => {
     const { navigation, route, getServiceCategoriesAsync, serviceCategories, setModalProps } = props;
 
     const { colorIndex } = route.params;
-    const [isOpen, setIsOpen] = React.useState(false);
     const [buttonWidth, setButtonWidth] = React.useState(((Dimensions.get('window').width * 65) / 100 - 50) / 4);
     const [numColumns, setNumColumns] = React.useState(4);
 
@@ -23,12 +21,16 @@ const ServicecCategoryDetailsScreen = (props) => {
         setModalProps({ serviceCategoryId: route.params?._id });
     }, []);
 
+    // console.log(`ServicecCategoryDetailsScreen - route.params?._id: `, route.params?._id) //! OK
+
     const selectedServiceCategory = serviceCategories.find((sc) => sc._id === route.params?._id);
 
     const { services } = selectedServiceCategory;
 
+    // console.log(`ServicecCategoryDetailsScreen - services: `, services); //! OK
+
     const formatData = (data, numColumns) => {
-        console.log(`data: `, data);
+        // console.log(`ServicecCategoryDetailsScreen - data: `, data);
         let numberOfFullRows = Math.floor(data.length / numColumns); //! chia lay nguyen
 
         let numberOfElementLastRows = data.length - numberOfFullRows * numColumns;
@@ -41,19 +43,11 @@ const ServicecCategoryDetailsScreen = (props) => {
         return data;
     };
 
-    const handleExpand = () => {
-        editServiceRef.current.expand();
-
-    };
-
-    const editServiceRef = React.useRef();
-
-    console.log(`editServiceRef: `, editServiceRef);
     const ServiceItemWithEmpty = (serviceData) => {
         if (serviceData.item.empty === true) {
             return <ServiceItem service={serviceData.item} empty={true} />;
         }
-        return <ServiceItem colorIndex={colorIndex} service={serviceData.item} navigation={navigation} onLongPress={handleExpand} />;
+        return <ServiceItem colorIndex={colorIndex} service={serviceData.item} navigation={navigation} onLongPress={() => handle} />;
     };
 
     return (
@@ -67,7 +61,6 @@ const ServicecCategoryDetailsScreen = (props) => {
                 numColumns={numColumns}
             />
 
-            <EditServiceBottomSheet ref={editServiceRef} />
         </View>
     );
 };

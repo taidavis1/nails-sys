@@ -1,20 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, Platform, StatusBar, Button } from 'react-native';
+import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
 //! themes -> useTheme
 import theme from './themes/Light';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 //! imp Navigation
 import { AppNavigator } from './navigation';
 
-//! imp Modals
-import RootModal from './components/Modal';
-
 export default function App() {
-
 
     const styles = {
         container: {
@@ -46,10 +41,7 @@ export default function App() {
     return (
         <SafeAreaView style={style.container}>
             <Provider store={store}>
-                <BottomSheetModalProvider>
                     <AppNavigator />
-                    <RootModal />
-                </BottomSheetModalProvider>
             </Provider>
         </SafeAreaView>
     );

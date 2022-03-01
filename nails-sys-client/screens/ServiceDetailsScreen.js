@@ -4,14 +4,14 @@ import React from 'react';
 const ServiceDetailsScreen = (props) => {
     const { navigation, route, colorIndex } = props;
     const { service } = route.params;
-    console.log(`ServiceDetailsScreen - route.params.service: `, service);
+    // console.log(`ServiceDetailsScreen - route.params.service: `, service); //! OK
     return (
         <View>
             <Text>ServiceDetailsScreen</Text>
             <Text>ID: {service._id}</Text>
             <Text>Name: {service.name}</Text>
             <Text>Price: {service.price}</Text>
-            <Text>Content: {service.content}</Text>
+            <Text>Description: {service.discription}</Text>
 
         </View>
     );

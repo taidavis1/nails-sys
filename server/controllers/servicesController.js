@@ -2,6 +2,7 @@
 const ServiceCategory = require('../models/ServiceCategory');
 const Service = require('../models/Service');
 
+//! GET ServiceCategory
 const getAllServiceCategories = async (req, res, next) => {
     try {
         const serviceCategories = await ServiceCategory.find({}).populate({ path: 'services', model: 'Service' });
@@ -19,7 +20,7 @@ const getServicesWithCategory = async (req, res, next) => {
     const { serviceCategoryId } = req.params;
     console.log(`servicesController - serviceCategoryId: `, serviceCategoryId);
     try {
-        const servicesCategory = await ServiceCategory.findById({ _id: serviceCategoryId }).populate({ path: 'services', model: 'Service' });
+        const servicesCategory = await ServiceCategory.findById({ serviceCategoryId }).populate({ path: 'services', model: 'Service' });
         // const services = await ServiceCategory.find({ _id: serviceCategoryId });
         const services = servicesCategory[0].services;
         console.log('SUCCESS servicesController - getServicesWithCategory: ', services);
@@ -32,18 +33,16 @@ const getServicesWithCategory = async (req, res, next) => {
     }
 };
 
+//! CREATE ServiceCategory
 const createServiceCategory = async (req, res) => {
     try {
-        //! Service Category Data
         const { name } = req.body;
-        console.log(`serviceController - name: `, name);
 
         const existServiceCategory = await ServiceCategory.findOne({ name });
         if (existServiceCategory) {
             return res.status(400).json({ errorMessage: `Category: ${name} already exists!` });
         }
 
-        // ! create Category instance
         var serviceCategory = new ServiceCategory();
         serviceCategory.name = name;
         serviceCategory = await serviceCategory.save();
@@ -65,10 +64,10 @@ const createServiceCategory = async (req, res) => {
 
 const createService = async (req, res, next) => {
     try {
-        const { name, price, content, category } = req.body;
-        // const { serviceCategoryId } = req.params;
+        const { name, price, description } = req.body;
+        const { serviceCategoryId } = req.params;
 
-        // console.log(`servicesController - id: `, serviceCategoryId);
+        console.log(`servicesController - id: `, serviceCategoryId);
 
         const existService = await Service.findOne({ name });
         if (existService) {
@@ -80,12 +79,12 @@ const createService = async (req, res, next) => {
         var service = new Service();
         service.name = name;
         service.price = price;
-        service.content = content;
-        service.category = category;
+        service.description = description;
+        service.category = serviceCategoryId;
         service = await service.save();
 
         //! UPDATE - Service Category
-        await ServiceCategory.findByIdAndUpdate(category, { $push: { services: service._id } }, { new: true });
+        await ServiceCategory.findByIdAndUpdate(serviceCategoryId, { $push: { services: service._id } }, { new: true });
 
         res.status(200).json({
             service,
@@ -108,15 +107,19 @@ const deleteService = async (req, res, next) => {
         console.log(`serviceController - deleteService - serviceCategoryId: `, serviceCategoryId);
         console.log(`serviceController - deleteService - serviceId: `, serviceId);
 
-        const service = await Service.findById(serviceId);
-        console.log(`serviceController - deleteService - service: `, service);
-        if (!service) {
-            //! lỗi
+        const existService = await Service.findById(serviceId);
+        if (! existService) {
+            console.log('ERROR servicesController.deleteService existService');
+            return res.status(400).json({ errorMessage: `Service not exist!` });
         }
-        
+        const service = await existService.remove();
 
-        // const removeService = await service.remove();
-        // console.log(`serviceController - deleteService - removeService: `, removeService);
+        console.log(`serviceController - deleteService - removeService: `, service);
+        
+        res.status(200).json({
+            service,
+            successMessage: `Service removed successfully!`,
+        });
 
         // await ServiceCategory.updateMany({ _id: service.category }, { $pull: { products: product._id } });
 
@@ -134,7 +137,7 @@ const deleteService = async (req, res, next) => {
         var service = new Service();
         service.name = name;
         service.price = price;
-        service.content = content;
+        service.description = description;
         service.category = category;
         service = await service.save();
 

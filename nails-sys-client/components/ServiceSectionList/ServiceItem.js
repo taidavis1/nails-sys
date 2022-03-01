@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { setModalProps } from '../../redux/slices/modal/modalSlice';
+import { showModal } from '../../redux/slices/modal/modalSlice';
 
 //! theme
 import theme from '../../themes/Light';
@@ -9,22 +9,24 @@ import theme from '../../themes/Light';
 //!
 
 const ServiceItem = (props) => {
-    const { style, navigation, service, colorIndex, empty, onLongPress, setModalProps } = props;
+    const { style, navigation, service, colorIndex, empty, onLongPress, showModal } = props;
     // console.log(`ServiceCategoryItem-serviceCategory: `, serviceCategory);
     const handleTouch = () => {
         navigation?.navigate('ServicecDetails', { service: service, colorIndex: colorIndex });
     };
 
     const handleLongPress = () => {
-        onLongPress(); //! implement out-function
-        // setModalProps(service);
-        setModalProps({
-            serviceCategoryId: service.category,
-            serviceId: service._id,
-            serviceName: service.name,
-            servicePrice: service.price,
-            serviceContent: service.content,
-        })
+        console.log(`ServiceItem - handleLongPress -> LongPress`); //! OK
+        showModal({
+            modalId: 'EDIT_SERVICE_MODAL',
+            modalProps: {
+                serviceCategoryId: service.category,
+                serviceId: service._id,
+                serviceName: service.name,
+                servicePrice: service.price,
+                serviceDesc: service.description,
+            },
+        });
     };
 
     const styles = {
@@ -76,7 +78,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    setModalProps,
+    showModal,
     // getServiceCategoriesAsync,
 };
 

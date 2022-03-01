@@ -3,8 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 
 //! Drawer
 import DrawerMenu from './DrawerMenu';
-import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { Button, View, Text } from 'react-native';
+
+//! Modal
+import RootModal from '../../components/Modal'
 
 const AppNavigator = () => {
     // // ref
@@ -24,8 +25,9 @@ const AppNavigator = () => {
     return (
         <NavigationContainer>
             {
-            //! BottomSheetModal (Global + Redux Modal)
+            //! Modals
             }
+            <RootModal />
             <DrawerMenu />
         </NavigationContainer>
     );

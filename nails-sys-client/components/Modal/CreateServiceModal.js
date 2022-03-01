@@ -9,13 +9,13 @@ import { addServiceAsync } from '../../redux/slices/services/servicesSlice';
 
 const CreateServiceModal = (props) => {
     const { hideModal, addServiceAsync } = props;
-    
+
     //! ___DEBUG
     // console.log(`CreateServiceModal - serviceCategoryId: `, serviceCategoryId);
 
     const [name, setName] = React.useState('');
     const [price, setPrice] = React.useState(50);
-    const [content, setContent] = React.useState('');
+    const [description, setDescription] = React.useState('');
 
     const handleChangeName = (event) => {
         setName(event);
@@ -25,14 +25,12 @@ const CreateServiceModal = (props) => {
         setPrice(Number(event));
     };
 
-    const handleChangeContent = (event) => {
-        setContent(event);
+    const handleChangeDescription = (event) => {
+        setDescription(event);
     };
 
     const handleCreate = () => {
-        console.log(`Create Button`);
-        addServiceAsync({name: name, price: price, content: content});
-
+        addServiceAsync({ name: name, price: price, description: description });
         hideModal();
     };
 
@@ -94,8 +92,8 @@ const CreateServiceModal = (props) => {
                 <TextInput style={styles.input} onChangeText={handleChangePrice} value={price.toString()}></TextInput>
             </View>
             <View style={styles.inputControl}>
-                <Text>Content</Text>
-                <TextInput  style={styles.input} onChangeText={handleChangeContent} value={content}></TextInput>
+                <Text>Description</Text>
+                <TextInput style={styles.input} onChangeText={handleChangeDescription} value={description}></TextInput>
             </View>
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => handleCreate()}>
@@ -110,8 +108,7 @@ const CreateServiceModal = (props) => {
 };
 
 const mapStateToProps = (state) => {
-    return {
-    };
+    return {};
 };
 
 const mapDispatchToProps = {

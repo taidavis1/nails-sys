@@ -43,43 +43,6 @@ const ServicesScreen = (props) => {
         getServiceCategoriesAsync();
     }, []);
 
-    //! State change
-    // React.useEffect(() => {
-    //     // return response;
-    //         setCategories(serviceCategories);
-    //     // if (isMounted.current) {
-    //     // }
-    // }, [categories]);
-
-    // const categoryData = [
-    //     {
-    //         categoryName: 'ENHANCEMENT',
-    //         categoryScreen: 'EnhancementScreen',
-    //         // categoryURI: 'https://jsonplaceholder.typicode.com/users',
-    //     },
-    //     {
-    //         categoryName: 'PEDI/MANI',
-    //         categoryScreen: 'PediManiScreen',
-    //         categoryURI: 'https://jsonplaceholder.typicode.com/users',
-    //     },
-    //     {
-    //         categoryName: 'WAXING',
-    //         categoryScreen: 'WaxingScreen',
-    //         categoryURI: 'https://jsonplaceholder.typicode.com/users',
-    //     },
-    //     {
-    //         categoryName: "KID's",
-    //         categoryScreen: 'KidsScreen',
-    //         categoryURI: 'https://jsonplaceholder.typicode.com/users',
-    //     },
-    //     {
-    //         categoryName: 'CATEGORY5',
-    //         categoryScreen: 'Category5',
-    //         categoryURI: 'https://jsonplaceholder.typicode.com/users',
-    //     },
-    // ];
-    // <View style={{ width: '100%', height: '100%', position: 'absolute', left: 0, top: 0, backgroundColor: 'black', opacity: 0.25 }} />
-
     return (
         <View style={styles.container}>
             <ScrollView horizontal={true} style={styles.content}>

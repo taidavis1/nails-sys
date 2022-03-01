@@ -15,7 +15,7 @@ const EditServiceBottomSheet = React.forwardRef((props, ref) => {
     const { modalProps } = useSelector((state) => state.modal);
     // const [name, setName] = React.useState('');
 
-    console.log(`EditServiceBottomSheet - modalProps: `, modalProps);
+    // console.log(`EditServiceBottomSheet - modalProps: `, modalProps);
     const screenWidth = Dimensions.get('window').width;
 
     //! Response

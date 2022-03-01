@@ -8,13 +8,11 @@ const servicesController = require('../controllers/servicesController');
 
 //! Get All of Service Category
 router.get("/", servicesController.getAllServiceCategories);
-//! Create a Service Category
+//! CREATE ServiceCategory
 router.post('/', servicesController.createServiceCategory);
-//! Create a Service within Category
-router.get('/:serviceCategoryId', servicesController.getServicesWithCategory);
-//! Create a Service within Category
+//! CREATE Service
 router.post('/:serviceCategoryId', servicesController.createService);
-//! Delete a Service within Category
+//! DELETE Service within Category
 router.delete('/:serviceCategoryId/:serviceId', servicesController.deleteService);
 
 module.exports = router;

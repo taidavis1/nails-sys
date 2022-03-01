@@ -14,7 +14,6 @@ const CreateServiceCategoryModal = (props) => {
 
     const handleChange = (event) => {
         setName(event);
-        console.log(event);
     };
 
     const handleCreate = () => {
