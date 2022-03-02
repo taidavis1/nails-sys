@@ -22,21 +22,15 @@ const ServicecCategoryDetailsScreen = (props) => {
     }, []);
 
     // console.log(`ServicecCategoryDetailsScreen - route.params?._id: `, route.params?._id) //! OK
-
+    //! ERROR
     const selectedServiceCategory = serviceCategories.find((sc) => sc._id === route.params?._id);
 
-    const { services } = selectedServiceCategory;
-
-    // console.log(`ServicecCategoryDetailsScreen - services: `, services); //! OK
-
     const formatData = (data, numColumns) => {
-        // console.log(`ServicecCategoryDetailsScreen - data: `, data);
         let numberOfFullRows = Math.floor(data.length / numColumns); //! chia lay nguyen
 
         let numberOfElementLastRows = data.length - numberOfFullRows * numColumns;
 
         while (numberOfElementLastRows !== 0 && numberOfElementLastRows !== numColumns) {
-            // data.push({ name: `blank-${numberOfElementLastRows}`, empty: true });
             data = [...data, { name: 'black', empty: true }];
             numberOfElementLastRows += 1;
         }
@@ -52,15 +46,16 @@ const ServicecCategoryDetailsScreen = (props) => {
 
     return (
         <View style={styles.container}>
-            <FlatList
-                keyExtractor={(item) => item._id}
-                data={formatData(services, numColumns)}
-                // data={categories}
-                style={styles.container}
-                renderItem={(serviceData) => ServiceItemWithEmpty(serviceData)}
-                numColumns={numColumns}
-            />
-
+            {selectedServiceCategory.services && (
+                <FlatList
+                    keyExtractor={(item) => item._id}
+                    data={formatData(selectedServiceCategory.services, numColumns)}
+                    // data={categories}
+                    style={styles.container}
+                    renderItem={(serviceData) => ServiceItemWithEmpty(serviceData)}
+                    numColumns={numColumns}
+                />
+            )}
         </View>
     );
 };
