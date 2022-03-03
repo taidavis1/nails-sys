@@ -12,16 +12,8 @@ const modalSlice = createSlice({
     initialState,
     reducers: {
         showModal(state, action) {
-            // state.modalId = action.payload.modalId ? action.payload.modalId : state.modalId;
-            // state.modalProps = action.payload.modalProps ? action.payload.modalProps : state.modalProps;
-            // state.modalProps = action.payload?.modalProps;
-            // console.log(`action.payload.modalId: `, action.payload.modalId);
-
-            return {
-                ...state,
-                modalId: action.payload.modalId,
-                modalProps: { ...state.modalProps, ...action.payload.modalProps },
-            };
+            state.modalId = action.payload.modalId ? action.payload.modalId : state.modalId;
+            state.modalProps = action.payload.modalProps ? action.payload.modalProps : state.modalProps;
         },
         hideModal(state, action) {
             // return initialState;

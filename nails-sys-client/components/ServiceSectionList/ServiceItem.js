@@ -18,7 +18,7 @@ const ServiceItem = (props) => {
     const handleLongPress = () => {
         console.log(`ServiceItem - handleLongPress -> LongPress`); //! OK
         showModal({
-            modalId: 'EDIT_SERVICE_MODAL',
+            modalId: 'OPTIONS_SERVICE_MODAL',
             modalProps: {
                 serviceCategoryId: service.category,
                 serviceId: service._id,

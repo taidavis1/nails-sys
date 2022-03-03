@@ -18,6 +18,7 @@ import AboutScreen from '../../screens/AboutScreen';
 //! imp Icons
 import IconAddServiceOutline from '../../assets/icons/IconAddServiceOutline';
 import IconAddOutline from '../../assets/icons/IconAddOutline';
+import IconEditOutline from '../../assets/icons/IconEditOutline';
 
 const Stack = createStackNavigator();
 
@@ -32,7 +33,6 @@ const ServicesStackNavigator = (props) => {
                 component={ServicesScreen}
                 options={{
                     headerLeft: (props) => null,
-                    // headerRight: () => <Button title="About" color={theme.colors.text1} onPress={() => navigation.navigate('StackAbout')} />,
                     headerRight: () => (
                         <View style={{ marginRight: 5 }}>
                             <TouchableOpacity
@@ -54,7 +54,6 @@ const ServicesStackNavigator = (props) => {
                 component={ServicecCategoryDetailsScreen}
                 options={{
                     // headerLeft: (props) => null,
-                    // headerRight: () => <Button title="About" color={theme.colors.text1} onPress={() => navigation.navigate('StackAbout')} />,
                     headerRight: () => (
                         <View style={{ marginRight: 5 }}>
                             <TouchableOpacity
@@ -71,7 +70,27 @@ const ServicesStackNavigator = (props) => {
                     ),
                 }}
             />
-            <Stack.Screen name="ServicecDetails" component={ServiceDetailsScreen} />
+            <Stack.Screen
+                name="ServicecDetails"
+                component={ServiceDetailsScreen}
+                options={{
+                    // headerLeft: (props) => null,
+                    headerRight: () => (
+                        <View style={{ marginRight: 5 }}>
+                            <TouchableOpacity
+                                style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center' }}
+                                onPress={() => {
+                                    console.log(`ServicesStack - CREATE_SERVICE_MODAL`);
+                                    showModal({ modalId: 'CREATE_SERVICE_MODAL' });
+                                }}
+                            >
+                                <IconEditOutline sizeIcon={24} theme={theme} />
+                            </TouchableOpacity>
+                            {/* <ButtonCreate size={25} onPress={() => {}}/> */}
+                        </View>
+                    ),
+                }}
+            />
             <Stack.Screen name="StackAbout" component={AboutScreen} />
         </Stack.Navigator>
     );

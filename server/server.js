@@ -7,8 +7,7 @@ const cors = require('cors');
 var bodyParser = require('body-parser');
 
 //! imp Routes
-const serviceCategoryRoutes = require('./routes/serviceCategoryRoutes');
-const servicesRoutes = require('./routes/servicesRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
 
 var corsOptions = {
     origin: 'http://localhost:5000',
@@ -38,7 +37,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 //! routes
-app.use('/api/services', servicesRoutes);
+app.use('/api/services', serviceRoutes);
 
 // app.use("/api/auth", authRoutes);
 // app.use('/api/services1', serviceRoutes);

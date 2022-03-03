@@ -1,72 +1,64 @@
-import { StyleSheet, View, Text, TouchableOpacity, Button, Alert } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { connect } from 'react-redux';
-//! Icon
-import IconQuit from '../../assets/icons/IconQuit';
-//! theme
+
 import theme from '../../themes/Light';
 //! Actions
 import { hideModal } from '../../redux/slices/modal/modalSlice';
-import { removeServiceAsync } from '../../redux/slices/services/servicesSlice';
+import { updateServiceAsync } from '../../redux/slices/services/servicesSlice';
+// import { removeServiceAsync } from '../../redux/slices/services/servicesSlice'; //!EDIT
 
 const EditServiceModal = (props) => {
-    const { hideModal, modalProps, removeServiceAsync } = props;
+    const { modalProps, hideModal, updateServiceAsync } = props;
+    const [visiable, setVisiable] = React.useState(false);
 
-    const handleClose = () => {
-        console.log(`EditServiceModal - handleClose`);
-        hideModal();
+    // console.log(`EditServiceModal - modalProps: `, modalProps);
+    const [values, setValues] = React.useState({
+        name: modalProps.serviceName,
+        price: String(modalProps.servicePrice),
+        description: modalProps.serviceDesc,
+    });
+
+    const handleChange = (name, value) => {
+        setValues({
+            ...values,
+            [name]: value,
+        });
+        if (values.name !== value) {
+            setVisiable(true);
+        }
+
     };
 
-    const handleRemove = async () => {
-        console.log(`EditServiceModal - handleRemove`);
-        await hideModal();
-        showConfirmDialog();
-    };
-
-    //! Alert Yes/No
-    const showConfirmDialog = () => {
-        return Alert.alert('Are your sure?', 'Are you sure you want to remove this Service?', [
-            // The "Yes" button
-            {
-                text: 'Yes',
-                onPress: () => {
-                    console.log(`Yes`);
-                    removeServiceAsync();
-                },
-            },
-            // The "No" button
-            // Does nothing but dismiss the dialog when tapped
-            {
-                text: 'No',
-                onPress: () => {
-                    console.log(`No`);
-                },
-            },
-        ]);
+    const handleApply = () => {
+        updateServiceAsync({ name: values.name, price: values.price, description: values.description });
+        setVisiable(false);
     };
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 10 }} onPress={handleClose}>
-                <IconQuit sizeIcon={20} theme={theme} />
-            </TouchableOpacity>
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                <Text style={{ fontSize: 20 }}>Service: </Text>
-                <Text style={{ fontSize: 20 }}>{modalProps?.serviceName}</Text>
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+            <View style={styles.title}>
+                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Edit Service</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                <Text style={{ fontSize: 20 }}>Price: </Text>
-                <Text style={{ fontSize: 20 }}>{modalProps?.servicePrice}</Text>
+            <View style={styles.inputControl}>
+                <Text>Service name:</Text>
+                <TextInput style={styles.input} onChangeText={(text) => handleChange('name', text)} value={values.name} />
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                <Text style={{ fontSize: 20 }}>Content: </Text>
-                <Text style={{ fontSize: 20 }}>{modalProps?.serviceContent}</Text>
+            <View style={styles.inputControl}>
+                <Text>Price</Text>
+                <TextInput style={styles.input} onChangeText={(text) => handleChange('price', text)} value={values.price} />
             </View>
-            <View style={styles.button}>
-                <Button title="Edit Service" onPress={() => console.log(`Edit Service`)} />
+            <View style={styles.inputControl}>
+                <Text>Description</Text>
+                <TextInput style={styles.input} onChangeText={(text) => handleChange('description', text)} value={values.description} />
             </View>
-            <View style={styles.button}>
-                <Button title="Remove Service" onPress={() => handleRemove()} />
+            <View style={styles.footer}>
+                <TouchableOpacity onPress={() => hideModal()}>
+                    <Text style={styles.button}>Close</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleApply()}>
+                    <Text style={[styles.button, { color: visiable ? theme.colors.success : theme.colors.grey }]}>Apply</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -77,14 +69,25 @@ const styles = StyleSheet.create({
         width: '70%',
         height: 350,
         borderRadius: 10,
-        backgroundColor: theme.colors.background,
+        backgroundColor: 'white',
         padding: 10,
     },
     contentContainer: {
         flex: 1,
     },
+    inputControl: {
+        padding: 20,
+    },
+    input: {},
+    footer: {
+        flexDirection: 'row-reverse',
+    },
     button: {
-        marginVertical: 5,
+        fontSize: 16,
+        textTransform: 'uppercase',
+        fontWeight: 'bold',
+        margin: 15,
+        color: theme.colors.success,
     },
 });
 
@@ -96,7 +99,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     hideModal,
-    removeServiceAsync,
+    updateServiceAsync,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditServiceModal);

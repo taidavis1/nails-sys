@@ -10,6 +10,11 @@ const store = configureStore({
         modal: modalSlice,
         service: servicesSlice,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            immutableCheck: { warnAfter: 128 },
+            serializableCheck: { warnAfter: 128 },
+        }),
 });
 
 export default store;

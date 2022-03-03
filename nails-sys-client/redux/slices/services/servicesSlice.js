@@ -47,7 +47,7 @@ export const addServiceAsync = createAsyncThunk('services/addServiceAsync', asyn
 
     if (response.ok) {
         const { service } = await response.json();
-        return service; //! return Array
+        return service;
     }
 });
 
@@ -65,7 +65,26 @@ export const removeServiceAsync = createAsyncThunk('services/removeServiceAsync'
 
     if (response.ok) {
         const { service } = await response.json();
-        return service; //! return Array
+        return service;
+    }
+});
+
+//! UPDATE Service
+export const updateServiceAsync = createAsyncThunk('services/updateServiceAsync', async (payload, { getState }) => {
+    const { serviceCategoryId, serviceId } = getState().modal.modalProps;
+    const { name, price, description } = payload;
+
+    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}/${serviceId}`), {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, price, description }),
+    });
+
+    if (response.ok) {
+        const { updatedService } = await response.json();
+        return updatedService; //! return a Object
     }
 });
 
@@ -114,6 +133,16 @@ const servicesSlice = createSlice({
             let categories = state.serviceCategories;
             let catIndex = categories.findIndex((item) => item._id === action.payload.category);
             let updatedServices = categories[catIndex].services.filter((service) => service._id !== action.payload._id);
+            if (catIndex != -1) state.serviceCategories[catIndex].services = updatedServices;
+        });
+        builder.addCase(updateServiceAsync.pending, (state, action) => {
+            console.log('updateServiceAsync pending');
+        });
+        builder.addCase(updateServiceAsync.fulfilled, (state, action) => {
+            console.log('updateServiceAsync fulfilled');
+            let categories = state.serviceCategories;
+            let catIndex = categories.findIndex((item) => item._id === action.payload.category);
+            let updatedServices = categories[catIndex].services.map((service) => (service._id === action.payload._id ? action.payload : service));
             if (catIndex != -1) state.serviceCategories[catIndex].services = updatedServices;
         });
     },

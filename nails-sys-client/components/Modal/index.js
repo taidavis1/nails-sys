@@ -9,6 +9,7 @@ import { showModal, hideModal } from '../../redux/slices/modal/modalSlice';
 //! imp Modals
 import CreateServiceCategoryModal from './CreateServiceCategoryModal';
 import CreateServiceModal from './CreateServiceModal';
+import OptionsServiceModal from './OptionsServiceModal';
 import EditServiceModal from './EditServiceModal';
 
 const RootModal = (props) => {
@@ -17,12 +18,9 @@ const RootModal = (props) => {
     const MODAL_COMPONENTS = {
         CREATE_SERVICE_CATEGORY_MODAL: CreateServiceCategoryModal,
         CREATE_SERVICE_MODAL: CreateServiceModal,
+        OPTIONS_SERVICE_MODAL: OptionsServiceModal,
         EDIT_SERVICE_MODAL: EditServiceModal,
     };
-
-    //! no Id in store
-    //! assign a constant that is either one of our custom views or a noop function if the id is not set
-    //! if no set id empty const ModalView = MODAL_COMPONENTS[id] || function () {};
 
     if (!modalId) {
         return null;
