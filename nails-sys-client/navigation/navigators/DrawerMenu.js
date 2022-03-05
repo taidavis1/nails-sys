@@ -35,7 +35,7 @@ const DrawerMenu = (props) => {
                 defaultStatus="open"
                 screenOptions={{
                     drawerStyle: {
-                        width: isLargeScreen ? '35%' : '60%',
+                        width: isLargeScreen ? '25%' : '60%',
                         backgroundColor: theme.colors.boxBackground,
                     },
                     // overlayColor : 1 //! ???

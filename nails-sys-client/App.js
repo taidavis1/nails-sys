@@ -5,12 +5,10 @@ import theme from './themes/Light';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
-
 //! imp Navigation
-import { AppNavigator } from './navigation';
+import AppNavigator from './navigation/navigators';
 
 export default function App() {
-
     const styles = {
         container: {
             flex: 1,
@@ -41,7 +39,7 @@ export default function App() {
     return (
         <SafeAreaView style={style.container}>
             <Provider store={store}>
-                    <AppNavigator />
+                <AppNavigator />
             </Provider>
         </SafeAreaView>
     );
