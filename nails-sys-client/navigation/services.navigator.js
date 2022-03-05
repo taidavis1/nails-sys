@@ -4,26 +4,26 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { connect } from 'react-redux';
 
 //! imp reducer - actions
-import { showModal, hideModal } from '../../redux/slices/modal/modalSlice';
+import { showModal, hideModal } from '../redux/slices/modal/modalSlice';
 
 //! imp theme
-import theme from '../../themes/Light';
+import theme from '../themes/Light';
 
 //! imp Screens
-import ServicesScreen from '../../screens/ServicesScreen';
-import ServicecCategoryDetailsScreen from '../../screens/ServicecCategoryDetailsScreen';
-import ServiceDetailsScreen from '../../screens/ServiceDetailsScreen';
-import AboutScreen from '../../screens/AboutScreen';
+import ServicesScreen from '../screens/ServicesScreen';
+import ServicecCategoryDetailsScreen from '../screens/ServicecCategoryDetailsScreen';
+import ServiceDetailsScreen from '../screens/ServiceDetailsScreen';
+import AboutScreen from '../screens/AboutScreen';
 
 //! imp Icons
-import IconAddServiceOutline from '../../assets/icons/IconAddServiceOutline';
-import IconAddOutline from '../../assets/icons/IconAddOutline';
-import IconEditOutline from '../../assets/icons/IconEditOutline';
+import IconAddServiceOutline from '../assets/icons/IconAddServiceOutline';
+import IconAddOutline from '../assets/icons/IconAddOutline';
+import IconEditOutline from '../assets/icons/IconEditOutline';
 
 
-const ServicesStackNavigator = (props) => {
+const ServicesNavigator = (props) => {
     const { navigation, route, modalId, showModal, hideModal } = props;
-    // console.log(`ServicesStackNavigator - route: `, route);
+    // console.log(`ServicesNavigator - route: `, route);
     
     const Stack = createStackNavigator();
     
@@ -116,4 +116,4 @@ const mapDispatchToProps = {
     hideModal,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServicesStackNavigator);
+export default connect(mapStateToProps, mapDispatchToProps)(ServicesNavigator);
