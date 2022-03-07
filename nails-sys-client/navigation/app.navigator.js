@@ -5,12 +5,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MainDrawerNavigation from './MainDrawerNavigation';
 import CustomHeader from './CustomHeader';
 
-const Stack = createStackNavigator();
+import RootModal from '../components/Modal';
+
+const RootStack = createStackNavigator();
 
 const AppNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator
+            <RootModal />
+            <RootStack.Navigator
                 screenOptions={{
                     headerMode: 'screen',
                     headerTintColor: '#404554',
@@ -23,8 +26,8 @@ const AppNavigator = () => {
                     },
                 }}
             >
-                <Stack.Screen name="MainDrawer" component={MainDrawerNavigation} />
-            </Stack.Navigator>
+                <RootStack.Screen name="MainDrawer" component={MainDrawerNavigation} />
+            </RootStack.Navigator>
         </NavigationContainer>
     );
 };
