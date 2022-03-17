@@ -37,11 +37,11 @@ export default function App() {
     };
 
     return (
-        <SafeAreaView style={style.container}>
-            <Provider store={store}>
+        <Provider store={store}>
+            <SafeAreaView style={style.container}>
                 <AppNavigator />
-            </Provider>
-        </SafeAreaView>
+            </SafeAreaView>
+        </Provider>
     );
 }
 

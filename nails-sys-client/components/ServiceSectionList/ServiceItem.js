@@ -6,8 +6,6 @@ import { showModal } from '../../redux/slices/modal/modalSlice';
 //! theme
 import theme from '../../themes/Light';
 
-//!
-
 const ServiceItem = (props) => {
     const { style, navigation, service, colorIndex, empty, onLongPress, showModal } = props;
     // console.log(`ServiceCategoryItem-serviceCategory: `, serviceCategory);
@@ -16,17 +14,17 @@ const ServiceItem = (props) => {
     };
 
     const handleLongPress = () => {
-        console.log(`ServiceItem - handleLongPress -> LongPress`); //! OK
-        showModal({
-            modalId: 'OPTIONS_SERVICE_MODAL',
-            modalProps: {
-                serviceCategoryId: service.category,
-                serviceId: service._id,
-                serviceName: service.name,
-                servicePrice: service.price,
-                serviceDesc: service.description,
-            },
-        });
+        // console.log(`ServiceItem - handleLongPress -> LongPress`); //! OK
+        // showModal({
+        //     modalId: 'OPTIONS_SERVICE_MODAL',
+        //     modalProps: {
+        //         serviceCategoryId: service.category,
+        //         serviceId: service._id,
+        //         serviceName: service.name,
+        //         servicePrice: service.price,
+        //         serviceDesc: service.description,
+        //     },
+        // });
     };
 
     const styles = {

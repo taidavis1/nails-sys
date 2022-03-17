@@ -8,6 +8,7 @@ import IconSignoutOutline from '../assets/icons/IconSignoutOutline';
 import IconTurnTrackingOutline from '../assets/icons/IconTurnTrackingOutline';
 import IconEmployeesOutline from '../assets/icons/IconEmployeesOutline';
 import IconEditOutline from '../assets/icons/IconEditOutline';
+import IconGiftCardOutline from '../assets/icons/IconGiftCardOutline';
 
 export const drawerItemsMain = [
     {
@@ -19,13 +20,13 @@ export const drawerItemsMain = [
     {
         key: 'Settings', //! key of Main Drawer
         title: 'Settings',
-        icon: <IconHomeOutline />,
+        icon: <IconSettingOutline />,
         routes: [
             { nav: 'MainDrawer', key: 'Services', routeName: 'Services', title: 'Services', icon: <IconServicesOutline /> },
             { nav: 'MainDrawer', key: 'TurnTracking', routeName: 'TurnTracking', title: 'Turn Tracking', icon: <IconTurnTrackingOutline /> },
             { nav: 'MainDrawer', key: 'Employees', routeName: 'Employees', title: 'Employees', icon: <IconEmployeesOutline /> },
             { nav: 'MainDrawer', key: 'Inventory', routeName: 'Inventory', title: 'Inventory', icon: <IconEditOutline /> },
-            { nav: 'MainDrawer', key: 'GiftCard', routeName: 'GiftCard', title: 'Gift Card', icon: <IconHomeOutline /> },
+            { nav: 'MainDrawer', key: 'GiftCard', routeName: 'GiftCard', title: 'Gift Card', icon: <IconGiftCardOutline /> },
         ],
     },
 ];

@@ -6,10 +6,14 @@ const serviceCategorySchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        services: [
+        color: {
+            type: String,
+            required: true,
+        },
+        subCategories: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Service',
+                ref: 'SubCategory',
                 required: true,
             },
         ],

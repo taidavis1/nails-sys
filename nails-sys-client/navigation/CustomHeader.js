@@ -1,11 +1,21 @@
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { DrawerActions } from '@react-navigation/native';
+import { DrawerActions, useRoute } from '@react-navigation/native';
 
 function CustomHeader(props) {
+
+    const route = useRoute();
+    React.useEffect(() => { //This will run whenever params change
+         const {params = {}} = route;
+        //your logic here
+    }, [route]);
+
+
     const toggleDrawer = () => {
         props.navigation.dispatch(DrawerActions.toggleDrawer());
     };
+
+    
 
     return (
         <SafeAreaView style={{ marginTop: StatusBar.currentHeight }}>
@@ -24,6 +34,14 @@ function CustomHeader(props) {
 }
 
 const styles = StyleSheet.create({
+    surface: {
+        padding: 8,
+        height: 80,
+        width: 80,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 4,
+    },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',

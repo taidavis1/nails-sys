@@ -10,15 +10,21 @@ import { addServiceCategoryAsync } from '../../redux/slices/services/servicesSli
 const CreateServiceCategoryModal = (props) => {
     const { hideModal, addServiceCategoryAsync } = props;
 
-    const [name, setName] = React.useState('');
+    const [values, setValues] = React.useState({
+        name: '',
+        color: '#6d28d9',
+    });
 
-    const handleChange = (event) => {
-        setName(event);
+    const handleChange = (name, value) => {
+        setValues({
+            ...values,
+            [name]: value,
+        });
     };
 
     const handleCreate = () => {
         console.log(`Create Button`);
-        addServiceCategoryAsync({ name: name });
+        addServiceCategoryAsync({ name: values.name, color: values.color });
         hideModal();
     };
 
@@ -66,11 +72,15 @@ const CreateServiceCategoryModal = (props) => {
     return (
         <View style={containerStyles}>
             <View style={styles.title}>
-                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Create A Service Category</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Create New Category</Text>
             </View>
-            <View style={{ flex: 1 }}>
-                <Text>Category name:</Text>
-                <TextInput style={styles.input} onChangeText={handleChange} value={name}></TextInput>
+            <View style={styles.inputControl}>
+                <Text>Name:</Text>
+                <TextInput style={styles.input} onChangeText={(text) => handleChange('name', text)} value={values.name} />
+            </View>
+            <View style={styles.inputControl}>
+                <Text>Color: </Text>
+                <TextInput style={styles.input} onChangeText={(text) => handleChange('color', text)} value={values.color} />
             </View>
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => handleCreate()}>

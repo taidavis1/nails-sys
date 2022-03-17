@@ -20,10 +20,8 @@ const AppNavigator = () => {
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },
-                    header: (props) => {
-                        //! props Stack
-                        return <CustomHeader {...props} />;
-                    },
+                    headerShown: false,
+                    // header: (props) => <CustomHeader {...props} />,
                 }}
             >
                 <RootStack.Screen name="MainDrawer" component={MainDrawerNavigation} />

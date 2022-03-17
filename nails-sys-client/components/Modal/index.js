@@ -9,6 +9,7 @@ import { showModal, hideModal } from '../../redux/slices/modal/modalSlice';
 //! imp Modals
 import CreateServiceCategoryModal from './CreateServiceCategoryModal';
 import CreateServiceModal from './CreateServiceModal';
+import CreateSubCategoryModal from './CreateSubCategoryModal';
 import OptionsServiceModal from './OptionsServiceModal';
 import EditServiceModal from './EditServiceModal';
 
@@ -17,6 +18,7 @@ const RootModal = (props) => {
 
     const MODAL_COMPONENTS = {
         CREATE_SERVICE_CATEGORY_MODAL: CreateServiceCategoryModal,
+        CREATE_SUBCATEGORY_MODAL: CreateSubCategoryModal,
         CREATE_SERVICE_MODAL: CreateServiceModal,
         OPTIONS_SERVICE_MODAL: OptionsServiceModal,
         EDIT_SERVICE_MODAL: EditServiceModal,

@@ -10,9 +10,6 @@ import RootModal from '../../components/Modal'
 const AppNavigator = () => {
     return (
         <NavigationContainer>
-            {
-            //! Modals
-            }
             <RootModal />
             <DrawerMenu />
         </NavigationContainer>

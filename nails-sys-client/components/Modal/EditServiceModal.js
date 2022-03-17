@@ -27,7 +27,6 @@ const EditServiceModal = (props) => {
         if (values.name !== value) {
             setVisiable(true);
         }
-
     };
 
     const handleApply = () => {

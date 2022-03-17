@@ -10,7 +10,8 @@ const ServiceCategoryItem = (props) => {
     const { style, navigation, colorIndex, serviceCategory } = props;
     // console.log(`ServiceCategoryItem-serviceCategory: `, serviceCategory);
     const handleTouch = () => {
-        navigation.navigate('ServicecCategoryDetails', { _id: serviceCategory._id, colorIndex: colorIndex });
+        console.log(`handle Touch Service Category`);
+        // navigation.navigate('ServicecCategoryDetails', { _id: serviceCategory._id, colorIndex: colorIndex });
     };
 
     const styles = {
@@ -37,8 +38,8 @@ const ServiceCategoryItem = (props) => {
     };
 
     return (
-        <TouchableOpacity activeOpacity={0.5} onPress={() => handleTouch()} style={{ ...styles.item, ...style }}>
-            <View>
+        <TouchableOpacity activeOpacity={0.5} onPress={() => handleTouch()}>
+            <View style={{ ...styles.item, ...style }}>
                 <Text style={styles.itemText}>{serviceCategory?.name}</Text>
             </View>
         </TouchableOpacity>

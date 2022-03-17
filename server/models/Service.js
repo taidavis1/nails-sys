@@ -1,8 +1,20 @@
 const mongoose = require('mongoose');
 
+// name: '',
+// displayName: '',
+// price: 0,
+// commission: 0,
+// color: '',
+// photo: '',
+// subCategory: '',
+
 const ServiceSchema = mongoose.Schema(
     {
         name: {
+            type: String,
+            required: true,
+        },
+        displayName: {
             type: String,
             required: true,
         },
@@ -10,13 +22,17 @@ const ServiceSchema = mongoose.Schema(
             type: Number,
             required: true,
         },
-        description: {
-            type: String,
-            required: false,
+        commission: {
+            type: Number,
+            // required: true,
         },
-        category: {
+        color: {
+            type: String,
+            // required: true,
+        },
+        subCategory: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'ServiceCategory',
+            ref: 'SubCategory',
             required: true,
         },
     },

@@ -1,56 +1,83 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Modal, View, Text, TouchableOpacity } from 'react-native';
-// //! API
-import axios from 'axios';
-//! comps
-import ServiceSectionList from '../components/ServiceSectionList';
-// import { CreateServiceCategoryModal } from '../components/Modal/CreateServiceCategoryModal';
+import { StyleSheet, View } from 'react-native';
+
 //imp react-redux
 import { connect } from 'react-redux';
+
 //! imp Actions
 import { getServiceCategoriesAsync } from '../redux/slices/services/servicesSlice';
 
-//! hooks
-import useScreenDimensions from '../hooks/useScreenDimensions';
-
-//! utils
-import { PlatformBaseUrl } from '../utils';
+//! imp Components
+import PanelCategories from '../components/PanelCategories';
+import PanelServices from '../components/PanelServices';
 
 //! theme
 import theme from '../themes/Light';
 
 const ServicesScreen = (props) => {
-    const { navigation, route, serviceCategories, getServiceCategoriesAsync } = props;
+    //! props: navigation, route,
+    //! props Redux: serviceCategories, getServiceCategoriesAsync
+    const [selectedCat, setSelectedCat] = React.useState('');
+    const [selectedSubCat, setSelectedSubCat] = React.useState('');
 
-    // const [categoryWidth, setCategoryWidth] = React.useState(Dimensions.get('screen'));
-    // const isMounted = React.useRef(true); // Initial value _isMounted = true
+    const nCount = React.useRef(0);
+    console.log(`ServicesScreen -> render:`, (nCount.current += 1));
 
-    // const screenData = useScreenDimensions();
-
-    // const screenWidth = Dimensions.get('screen').width;
-    // const screenHeight = Dimensions.get('window').height;
-
-    // DidMount Once
-    // React.useEffect(() => {
-    //     dispatch(getServiceCategoriesAsync());
-    // }, []);
-
-    //! ___DEBUG
-    // console.log(`ServicesScreen - serviceCategories: `, serviceCategories);
-
-    // //! Dispatch change
     React.useEffect(() => {
-        getServiceCategoriesAsync();
+        let isSubscribed = true;
+        // const fetchData = async () => {
+        //     try {
+        //         await props.getServiceCategoriesAsync();
+        //     } catch (error) {
+        //         console.log('error', error);
+        //     }
+        // };
+        if (isSubscribed) {
+            // fetchData();
+            props.getServiceCategoriesAsync();
+        }
+        return () => {
+            isSubscribed = false; //! Cancel the subscription
+        };
     }, []);
+
+    // useEffect(() => {
+    //     mounted.current = true;
+    //     if (list.length && !alert) {
+    //         return;
+    //     }
+    //     getList().then((items) => {
+    //         if (mounted.current) {
+    //             setCurrentServiceCategory();
+    //         }
+    //     });
+    //     return () => (mounted.current = false);
+    // }, [alert, list]);
+
+    //! change ID of ServiceCategory
+    // React.useEffect(() => {
+    //     // setCurrentServiceCategory();
+    //     console.log(`change ID ServiceCategory`);
+    // }, [currentServiceCategory]);
 
     return (
         <View style={styles.container}>
-            <ScrollView horizontal={true} style={styles.content}>
-                {serviceCategories?.map((serviceCategory, index) => {
-                    let colorIndex = Number(index.toString().slice(-1));
-                    return <ServiceSectionList key={index} colorIndex={colorIndex} serviceCategory={serviceCategory} navigation={navigation} />;
-                })}
-            </ScrollView>
+            <PanelCategories
+                style={[styles.PanelCategoriesContainer, { width: '20%' }]}
+                theme={theme}
+                serviceCategories={props.serviceCategories}
+                selectedCat={selectedCat}
+                setSelectedSubCat={setSelectedSubCat}
+                setSelectedCat={setSelectedCat}
+            />
+            <PanelServices
+                theme={theme}
+                style={styles.panelServicesConainer}
+                serviceCategories={props.serviceCategories}
+                selectedCat={selectedCat}
+                selectedSubCat={selectedSubCat}
+                setSelectedSubCat={setSelectedSubCat}
+            />
         </View>
     );
 };
@@ -58,6 +85,22 @@ const ServicesScreen = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'row',
+    },
+    mainContainer: {
+        flex: 1,
+        flexDirection: 'column',
+    },
+    PanelCategoriesContainer: {
+        padding: 5,
+        backgroundColor: '#EAEAEA',
+    },
+    panelSubCatContainer: {
+        backgroundColor: '#222222',
+    },
+    panelServicesConainer: {
+        backgroundColor: 'white',
+        padding: 5,
     },
     content: {
         flex: 1,
@@ -66,7 +109,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        // id: state.modal.id,
         serviceCategories: state.service.serviceCategories,
     };
 };

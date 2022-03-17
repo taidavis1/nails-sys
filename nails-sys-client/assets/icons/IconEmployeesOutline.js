@@ -17,7 +17,7 @@ const IconEmployeesOutline = ({ keyIcon, activeKeyIcon, sizeIcon, theme }) => {
     };
 
     return (
-        <Svg id="icon-employees-outline" viewBox={`0 0 32 32`} width={sizeIcon || 32} height={sizeIcon || 32}>
+        <Svg id="icon-employees-outline" viewBox={`0 0 32 28`} width={sizeIcon || 32} height={sizeIcon || 32}>
             <Circle style={styles.st0} cx="11" cy="6.5" r="5.5" />
             <Path style={styles.st0} d="M21,23.6c0,4.6-20,4.6-20,0s5.4-8.33,10-8.33S21,19,21,23.6Z" />
             <Circle style={styles.st0} cx="23.62" cy="8.03" r="4" />

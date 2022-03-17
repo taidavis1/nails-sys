@@ -18,14 +18,15 @@ import ServicesNavigator from '../navigation/services.navigator';
 //! theme
 import theme from '../themes/Light';
 
-const MainDrawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator();
 
 function MainDrawerNavigation() {
     const dimensions = useWindowDimensions();
     const isLargeScreen = dimensions.width >= 768;
     return (
-        <MainDrawer.Navigator
-            initialRouteName="Home"
+        <Drawer.Navigator
+        //! ANCHOR
+            initialRouteName="Services"
             screenOptions={{
                 drawerStyle: {
                     width: isLargeScreen ? '25%' : '60%',
@@ -46,31 +47,28 @@ function MainDrawerNavigation() {
             {
                 //! HOME
             }
-            <MainDrawer.Screen name="Home" component={HomeScreen} />
-            {/* <MainDrawer.Screen name="Home">
-        {props => <HomeScreen  {...props}/>}
-    </MainDrawer.Screen> */}
+            <Drawer.Screen name="Home" component={HomeScreen} />
             {
                 //! SERVICES
             }
-            <MainDrawer.Screen name="Services" component={ServicesNavigator} />
+            <Drawer.Screen name="Services" component={ServicesNavigator} />
             {
                 //! TURN TRACKING
             }
-            <MainDrawer.Screen name="TurnTracking" component={TurnTrackingScreen} />
+            <Drawer.Screen name="TurnTracking" component={TurnTrackingScreen} />
             {
                 //! EMPLOYEES
             }
-            <MainDrawer.Screen name="Employees" component={EmployeesScreen} />
+            <Drawer.Screen name="Employees" component={EmployeesScreen} />
             {
                 //! INVENTORY
             }
-            <MainDrawer.Screen name="Inventory" component={InventoryScreen} />
+            <Drawer.Screen name="Inventory" component={InventoryScreen} />
             {
                 //! EMPLOYEES
             }
-            <MainDrawer.Screen name="GiftCard" component={GiftCardScreen} />
-        </MainDrawer.Navigator>
+            <Drawer.Screen name="GiftCard" component={GiftCardScreen} />
+        </Drawer.Navigator>
     );
 }
 

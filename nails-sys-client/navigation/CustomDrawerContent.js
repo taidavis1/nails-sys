@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, Image } from 'react-native';
 import React from 'react';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { CommonActions } from '@react-navigation/native';
 
 function CustomDrawerContent(props) {
     //! props: navigation, route, drawerItems, theme
@@ -31,11 +32,18 @@ function CustomDrawerContent(props) {
 
         if (filteredMainDrawerRoutes.routes.length === 1) {
             const selectedRoute = filteredMainDrawerRoutes.routes[0];
-
             props.navigation.toggleDrawer();
-            props.navigation.navigate(selectedRoute.nav, {
-                screen: selectedRoute.routeName,
-            });
+            props.navigation.dispatch(
+                CommonActions.navigate({
+                    name: selectedRoute.nav,
+                    params: {
+                        service: selectedRoute.routeName,
+                    },
+                })
+            );
+            // props.navigation.navigate(selectedRoute.nav, {
+            //     screen: selectedRoute.routeName,
+            // });
         } else {
             setMainDrawer(false);
             setFilteredItems(filteredMainDrawerRoutes);
@@ -78,14 +86,6 @@ function CustomDrawerContent(props) {
                                 );
                             }}
                         ></DrawerItem>
-                        // <View key={parent.key}>
-                        //     <TouchableOpacity key={parent.key} testID={parent.key} onPress={() => onItemParentPress(parent.key)}>
-                        //         <View style={styles.parentItem}>
-                        //             {React.cloneElement(parent.icon, { index, activeIndex, theme })}
-                        //             <Text style={[styles.icon, styles.title]}>{parent.title}</Text>
-                        //         </View>
-                        //     </TouchableOpacity>
-                        // </View>
                     ))}
                 </DrawerContentScrollView>
             </View>
@@ -105,14 +105,27 @@ function CustomDrawerContent(props) {
                         key={route.key}
                         onPress={() => {
                             setActiveKey(route.key);
-                            props.navigation.navigate(route.nav, {
-                                screen: route.routeName,
-                            });
+                            console.log(`route.routeName: `, route.routeName);
+                            props.navigation.toggleDrawer();
+
+                            props.navigation.dispatch(
+                                CommonActions.reset({
+                                    index: 0,
+                                    routes: [{ name: route.routeName }],
+                                })
+                            );
                         }}
                         label={({ focused }) => {
                             return (
                                 <View style={styles.parentItem}>
-                                    <View style={{ marginRight: 20 }}>
+                                    <View
+                                        style={{
+                                            marginRight: 20,
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}
+                                    >
                                         {React.cloneElement(route.icon, {
                                             keyIcon: route.key,
                                             activeKeyIcon: activeKey,
@@ -136,32 +149,6 @@ function CustomDrawerContent(props) {
             </View>
         );
     };
-
-    // function renderFilteredItemsDrawer() {
-    //     return (
-    //         <View>
-    //             <TouchableOpacity onPress={() => toggleMainDrawer()} style={styles.backButtonRow}>
-    //                 <Text style={[styles.backButtonText, styles.title]}>{'BACK'}</Text>
-    //             </TouchableOpacity>
-    //             {filteredItems.routes.map((route) => {
-    //                 return (
-    //                     <TouchableOpacity
-    //                         key={route.routeName}
-    //                         testID={route.routeName}
-    // onPress={() =>
-    //     props.navigation.navigate(route.nav, {
-    //         screen: route.routeName,
-    //     })
-    // }
-    //                         style={styles.item}
-    //                     >
-    //                         <Text style={styles.title}>{route.title}</Text>
-    //                     </TouchableOpacity>
-    //                 );
-    //             })}
-    //         </View>
-    //     );
-    // }
 
     function renderLogoutBtn() {
         return (

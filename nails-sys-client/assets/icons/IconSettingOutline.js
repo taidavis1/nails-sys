@@ -1,12 +1,12 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const IconSettingOutline = ({ index, activeIndex, sizeIcon, theme }) => {
+const IconSettingOutline = ({ keyIcon, activeKeyIcon, sizeIcon, theme }) => {
 
     const styles = {
         st0: {
-            fill: index === activeIndex ? theme.colors.text1  : 'none',
-            stroke: index === activeIndex ? theme.colors.text1  : theme.colors.text1,
+            fill: keyIcon === activeKeyIcon ? theme.colors.text1  : 'none',
+            stroke: keyIcon === activeKeyIcon ? theme.colors.text1  : theme.colors.text1,
             strokeLinecap: 'round',
             strokeMiterlimit: 10,
             strokeWidth: 2,
