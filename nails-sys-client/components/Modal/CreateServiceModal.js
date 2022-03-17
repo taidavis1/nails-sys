@@ -66,6 +66,11 @@ const CreateServiceModal = (props) => {
         });
         hideModal();
     };
+    const onColorChanged = React.useCallback((color) => {
+        'worklet';
+        pickedColor.value = color;
+        console.log(pickedColor.value);
+    });
 
     const rStyle = useAnimatedStyle(() => {
         return {
@@ -130,7 +135,7 @@ const CreateServiceModal = (props) => {
                         end={{ x: 1, y: 0 }}
                         style={gradientStyles}
                         maxWidth={PICKER_WIDTH}
-                        onColorChanged={(event) => (pickedColor.value = event)}
+                        onColorChanged={onColorChanged}
                     />
                 </View>
             </View>
