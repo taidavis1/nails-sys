@@ -46,6 +46,10 @@ const CreateServiceModal = (props) => {
         setItemSubs(arrSubs);
     }, [valueCat]);
 
+    React.useEffect(() => {
+        setValues({ ...values, color: pickedColor.value });
+    }, [pickedColor.value]);
+
     const handleChange = (name, type, value) => {
         setValues({
             ...values,
@@ -66,10 +70,10 @@ const CreateServiceModal = (props) => {
         });
         hideModal();
     };
+    
     const onColorChanged = React.useCallback((color) => {
         'worklet';
         pickedColor.value = color;
-        console.log(pickedColor.value);
     });
 
     const rStyle = useAnimatedStyle(() => {
@@ -77,6 +81,7 @@ const CreateServiceModal = (props) => {
             backgroundColor: pickedColor.value,
         };
     });
+
     let containerStyles = [styles.container, { backgroundColor: theme.colors.background }];
     let inputControlStyles = styles.inputControl;
     let buttonStyles = [styles.button, { color: theme.colors.success }];
@@ -87,6 +92,7 @@ const CreateServiceModal = (props) => {
         containerStyles = [styles.containerSmall, { backgroundColor: theme.colors.background }];
         inputControlStyles = styles.inputControlSmall;
     }
+    // <Animated.View style={[{ borderWidth: 1, height: 20, width: 40 }, rStyle]} />
 
     return (
         <View style={containerStyles}>

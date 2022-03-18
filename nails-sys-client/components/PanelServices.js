@@ -116,8 +116,9 @@ function PanelServices(props) {
         }
         return data;
     }
-
+    //! renderItem //! reducers
     function renderServiceItem(item) {
+        //! type === button, item, empty
         if (item.empty === true) {
             return <ServiceItem title={item.name} colorButton="transparent" style={{ height: serviceStyle.height, color: 'transparent' }} />;
         }
@@ -125,8 +126,9 @@ function PanelServices(props) {
             <ServiceItem
                 theme={props.theme}
                 title={item.name}
-                colorButton="#151c47"
+                colorButton={item.color}
                 index={item.index}
+                price={item.price}
                 style={{ height: serviceStyle.height, color: 'white' }}
                 onPress={
                     item.index === 'add'

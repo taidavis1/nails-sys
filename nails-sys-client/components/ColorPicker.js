@@ -13,9 +13,15 @@ import Animated, {
 } from 'react-native-reanimated';
 
 function ColorPicker({ colors, start, end, style, maxWidth, onColorChanged }) {
-    const translateX = useSharedValue(0); //! storing the previous Position
-    const translateY = useSharedValue(0);
-    const scale = useSharedValue(1);
+    function randomIntFromInterval(min, max) {
+        // min and max included
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    // const translateX = useSharedValue(0); //! storing the previous Position
+    const translateX = useSharedValue(randomIntFromInterval(0, (maxWidth * (colors.length - 1)) / colors.length - CIRCLE_PICKER_SIZE));
+    // const translateY = useSharedValue(0);
+    // const scale = useSharedValue(1);
 
     //! the adjustedTranslateX will be derived from translateX
     const adjustedTranslateX = useDerivedValue(() => {
@@ -27,24 +33,24 @@ function ColorPicker({ colors, start, end, style, maxWidth, onColorChanged }) {
         //! here we can access some callbacks
         onStart: (_, context) => {
             context.x = adjustedTranslateX.value;
-            translateY.value = withSpring(-CIRCLE_PICKER_SIZE);
-            scale.value = withSpring(1.2);
+            // translateY.value = withSpring(-CIRCLE_PICKER_SIZE);
+            // scale.value = withSpring(1.2);
         }, //! onStart callback
         onActive: (event, context) => {
             //! each callback have 2 params, context will share value onStart - onEnd
             //! Active callback, we can access the Event
             translateX.value = context.x + event.translationX;
-            // console.log(`event Translation X: `, event.translationX); //! do luot
+            console.log(`event Translation X: `, event.translationX); //! do luot
         },
         onEnd: () => {
-            translateY.value = withSpring(0);
-            scale.value = withSpring(1);
+            // translateY.value = withSpring(0);
+            // scale.value = withSpring(1);
         }, //! End callback
     });
 
     const rStyle = useAnimatedStyle(() => {
         return {
-            transform: [{ translateX: adjustedTranslateX.value }, { translateY: translateY.value }, { scale: scale.value }],
+            transform: [{ translateX: adjustedTranslateX.value }],
         };
     }); //! reanimated Style
 
@@ -52,7 +58,9 @@ function ColorPicker({ colors, start, end, style, maxWidth, onColorChanged }) {
         const inputRange = colors.map((_, index) => {
             return (index / colors.length) * maxWidth;
         });
-        const backgroundColor = interpolateColor(translateX.value, inputRange, colors);
+        // const backgroundColor = interpolateColor(translateX.value, inputRange, colors);
+        const backgroundColor = '#' + (interpolateColor(translateX.value, inputRange, colors) & 0x00ffffff).toString(16).padStart(6, '0');
+        // console.log(`colorCode: `, colorCode);
         //! 2nd: Input Range
         //! 3th: Output Range
 
