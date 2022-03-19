@@ -4,6 +4,8 @@ import React from 'react';
 import theme from '../../themes/Light';
 import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+
 //! imp Comps
 import ColorPicker from '../ColorPicker';
 
@@ -50,6 +52,16 @@ const CreateServiceModal = (props) => {
         setValues({ ...values, color: pickedColor.value });
     }, [pickedColor.value]);
 
+    const onImagePicker = () => { 
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+          }).then(image => {
+            console.log(image);
+          });
+     }
+
     const handleChange = (name, type, value) => {
         setValues({
             ...values,
@@ -70,7 +82,7 @@ const CreateServiceModal = (props) => {
         });
         hideModal();
     };
-    
+
     const onColorChanged = React.useCallback((color) => {
         'worklet';
         pickedColor.value = color;
@@ -93,6 +105,7 @@ const CreateServiceModal = (props) => {
         inputControlStyles = styles.inputControlSmall;
     }
     // <Animated.View style={[{ borderWidth: 1, height: 20, width: 40 }, rStyle]} />
+
 
     return (
         <View style={containerStyles}>
@@ -134,7 +147,7 @@ const CreateServiceModal = (props) => {
                     <Text>Pick color: </Text>
                     <Animated.View style={[{ borderWidth: 1, height: 20, width: 40 }, rStyle]} />
                 </View>
-                <View style={{ marginTop: 50 }}>
+                <View style={{ marginTop: 30 }}>
                     <ColorPicker
                         colors={COLORS}
                         start={{ x: 0, y: 0 }}
@@ -145,9 +158,14 @@ const CreateServiceModal = (props) => {
                     />
                 </View>
             </View>
-            <View style={[inputControlStyles, { marginTop: 60 }]}>
-                <Text>Upload photo:</Text>
-                <TextInput style={styles.input} onChangeText={(evt) => handleChange('photo', 'text', evt)} value={values.photo} />
+            <View style={[inputControlStyles, { marginTop: 60, flexDirection: 'row'}]}>
+                <View style={{flex: 1}}>
+                    <Text>Upload photo:</Text>
+                    <TouchableOpacity style={{backgroundColor: 'red', padding: 10, width: '80%'}} onPress={() => onImagePicker}>
+                        <Text>Upload Select</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={[{ borderWidth: 1, height: 80, width: 100 }]}></View>
             </View>
             <View style={[inputControlStyles, { zIndex: 20 }]}>
                 <Text>Category:</Text>
