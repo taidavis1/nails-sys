@@ -44,6 +44,7 @@ function PanelCategories(props) {
                             title={item.name}
                             activeIndex={props.selectedCat}
                             index={item._id}
+                            style={styles.catItem}
                             onPress={() => {
                                 console.log(`catItemId: `, item._id);
                                 props.setSelectedCat(item._id);
