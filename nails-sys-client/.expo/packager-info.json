@@ -3,8 +3,8 @@
   "expoServerPort": 19000,
   "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://ty-rkz.anonymous.nails-sys-client.exp.direct",
+  "packagerNgrokUrl": "https://ty-rkz.anonymous.nails-sys-client.exp.direct",
+  "ngrokPid": 9340,
   "webpackServerPort": null
 }

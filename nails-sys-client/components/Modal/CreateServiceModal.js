@@ -75,11 +75,11 @@ const CreateServiceModal = (props) => {
     };
 
     React.useEffect(() => {
-        // Webじゃなければライブラリ利用の許可を得る
         if (Platform.OS !== 'web') {
             requestMediaLibraryPermissions();
         }
     }, []);
+    
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({

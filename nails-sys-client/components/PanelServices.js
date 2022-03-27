@@ -1,14 +1,15 @@
-import { StyleSheet, ScrollView, View, FlatList, Dimensions, TextPropTypes } from 'react-native';
+import { StyleSheet, ScrollView, View, FlatList, Dimensions, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { connect } from 'react-redux';
 
 //! imp Comps
-import ServiceSectionList from '../components/ServiceSectionList';
 import ServiceItem from './ServiceItem';
 import SubCategoryItem from './SubCategoryItem';
 
 //! Actions
 import { showModal } from '../redux/slices/modal/modalSlice';
+
+import IconPlusOutline from '../assets/icons/IconPlusOutline';
 
 function PanelServices(props) {
     //! props: subCategories
@@ -22,6 +23,14 @@ function PanelServices(props) {
 
     let services = []; //! RENDER COMPONENT
     let subCategories = []; //! RENDER COMPONENT
+
+    const onAddPress = () => {
+        console.log(`ServicesStack - CREATE_SERVICE_MODAL`);
+        props.showModal({
+            modalId: 'CREATE_SERVICE_MODAL',
+            modalProps: { serviceCategoryId: props.selectedCat, subCategoryId: props.selectedSubCat },
+        });
+    };
 
     //! SUBCATEGORIES => ALL
     if (props.selectedCat === 'all') {
@@ -104,23 +113,39 @@ function PanelServices(props) {
 
     function formatData(data, numColumns) {
         //! Add Button
-        data = [...data, { name: 'add', index: 'add' }];
+        data = [...data, { name: 'add', type: 'add' }];
 
         let numberOfFullRows = Math.floor(data.length / numColumns);
 
         let numberOfElementLastRows = data.length - numberOfFullRows * numColumns;
 
         while (numberOfElementLastRows !== 0 && numberOfElementLastRows !== numColumns) {
-            data = [...data, { name: 'black', empty: true }];
+            data = [...data, { name: 'black', type: 'empty' }];
             numberOfElementLastRows += 1;
         }
         return data;
     }
+
     //! renderItem //! reducers
     function renderServiceItem(item) {
         //! type === button, item, empty
-        if (item.empty === true) {
-            return <ServiceItem title={item.name} colorButton="transparent" style={{ height: serviceStyle.height, color: 'transparent' }} />;
+        if (item.type === 'add') {
+            return (
+                <TouchableOpacity style={{ flex: 1 }} onPress={onAddPress}>
+                    <View
+                        style={[styles.item, { height: serviceStyle.height, backgroundColor: '#E9E8E8', alignItems: 'center', justifyContent: 'center' }]}
+                    >
+                        <IconPlusOutline sizeIcon={25} theme={props.theme} color="#636363" />
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+        if (item.type === 'empty') {
+            return (
+                <View style={{flex: 1}}>
+                    <View style={[styles.item, { height: serviceStyle.height }]} />
+                </View>
+            );
         }
         return (
             <ServiceItem
@@ -129,20 +154,10 @@ function PanelServices(props) {
                 colorButton={item.color}
                 index={item.index}
                 price={item.price}
-                style={{ height: serviceStyle.height, color: 'white' }}
-                onPress={
-                    item.index === 'add'
-                        ? () => {
-                              console.log(`ServicesStack - CREATE_SERVICE_MODAL`);
-                              props.showModal({
-                                  modalId: 'CREATE_SERVICE_MODAL',
-                                  modalProps: { serviceCategoryId: props.selectedCat, subCategoryId: props.selectedSubCat },
-                              });
-                          }
-                        : () => {
-                              console.log(`PanelServices Service: `, item._id);
-                          }
-                }
+                style={[styles.item, { height: serviceStyle.height, color: 'white' }]}
+                onPress={() => {
+                    console.log(`onItemPress: `, item._id);
+                }}
             />
         );
     }
@@ -183,6 +198,17 @@ const styles = StyleSheet.create({
         height: '75%',
         width: 35,
         color: 'white',
+    },
+    addButton: {},
+    item: {
+        padding: 10,
+        margin: 5,
+        elevation: 5,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        shadowOpacity: 0.25,
+        borderRadius: 10,
     },
 });
 
