@@ -54,6 +54,10 @@ const CreateServiceModal = (props) => {
     });
 
     React.useEffect(() => {
+        setValues({ ...values, color: pickedColor.value });
+    }, [pickedColor.value]);
+
+    React.useEffect(() => {
         let categories = props.serviceCategories;
         let arrCats = categories.map((cat) => ({ label: cat.name, value: cat._id }));
         let catIndex = categories.findIndex((item) => item._id === valueCat);
@@ -63,9 +67,18 @@ const CreateServiceModal = (props) => {
         setItemSubs(arrSubs);
     }, [valueCat]);
 
-    React.useEffect(() => {
-        setValues({ ...values, color: pickedColor.value });
-    }, [pickedColor.value]);
+    const createFormData = (photo, body = {}) => {
+        const formData = new FormData();
+        formData.append('image', {
+            name: photo.fileName,
+            type: photo.type,
+            uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+        });
+
+        Object.keys(body).forEach((key) => {
+            formData.append(key, body[key]);
+        });
+    };
 
     const requestMediaLibraryPermissions = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -79,7 +92,7 @@ const CreateServiceModal = (props) => {
             requestMediaLibraryPermissions();
         }
     }, []);
-    
+
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -88,9 +101,14 @@ const CreateServiceModal = (props) => {
             aspect: [4, 3],
             quality: 1,
         });
-        console.log(`onImagePickerPress`, result);
+        console.log(`result Image: `, result);
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImage({
+                height: result.height,
+                width: result.width,
+                type: result.type,
+                uri: result.uri,
+            });
         }
     };
 
@@ -209,7 +227,7 @@ const CreateServiceModal = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View style={[{ borderWidth: 1, height: 80, width: 100, flex: 1 }]}>
-                    {image && <Image source={{ uri: image }} style={styles.image} />}
+                    {image && <Image source={{ uri: image.uri }} style={styles.image} />}
                 </View>
             </View>
             <View style={[inputControlStyles]}>

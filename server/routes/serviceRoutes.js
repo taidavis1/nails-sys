@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../middleware/multer');
 //! imp Controllers
 const servicesController = require('../controllers/servicesController');
 //! get All ServiceCategory
@@ -16,8 +17,9 @@ router.get('/', servicesController.getAllServiceCategories);
 router.post('/', servicesController.createServiceCategory);
 //! CREATE Sub
 router.post('/:serviceCategoryId', servicesController.createSubCategory);
-//! CREATE Service
-router.post('/:serviceCategoryId/:subCategoryId', servicesController.createService);
+//! CREATE Service + Middleware Multer (Upload Image)
+// router.post('/:serviceCategoryId/:subCategoryId', servicesController.createService);
+router.post('/:serviceCategoryId/:subCategoryId', upload.single('serviceImage'), servicesController.createService);
 //! DELETE Service within Category
 router.delete('/:serviceCategoryId/:serviceId', servicesController.deleteService);
 //! UPDATE Service within Category
