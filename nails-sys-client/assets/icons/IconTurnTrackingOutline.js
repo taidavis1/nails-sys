@@ -1,20 +1,18 @@
 import React from 'react';
 import Svg, { Circle, Polyline } from 'react-native-svg';
-import Colors from './../../constants/color';
 
-const IconTurnTrackingOutline = ({ index, activeIndex, sizeIcon, theme }) => {
-
+const IconTurnTrackingOutline = ({ keyIcon, activeKeyIcon, sizeIcon, theme }) => {
     const styles = {
         st0: {
-            fill: index === activeIndex ? theme.colors.text1  : 'none',
-            stroke: index === activeIndex ? theme.colors.text1  : theme.colors.text1,
+            stroke: theme.colors.text1,
+            fill: keyIcon === activeKeyIcon ? theme.colors.text1 : 'none',
             strokeLinecap: 'round',
-            strokeMiterlimit: 10,
+            strokeMiterlimit: 10,   
             strokeWidth: 2,
         },
         st1: {
-            stroke: index === activeIndex ? theme.colors.boxBackground : theme.colors.text1,
-        }
+            stroke: keyIcon === activeKeyIcon ? theme.colors.boxBackground : theme.colors.text1,
+        },
     };
 
     return (

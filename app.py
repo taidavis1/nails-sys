@@ -22,11 +22,13 @@ class Category(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
     
-    name_cat = db.Column(db.String(50) , nullable = False)
+    category_name = db.Column(db.String(50) , nullable = False)
     
-    def __init__ (self , name_cat):
+    services = db.relationship('Services' , backref = 'category')
+    
+    def __init__ (self , category_name):
         
-        self.name_cat = name_cat
+        self.category_name = category_name
 
 class Services(db.Model):
     
@@ -34,11 +36,8 @@ class Services(db.Model):
     
     services = db.Column(db.String(50) , nullable = False)
     
-    category = db.relationship('Category' , backref = 'cat')
-
     name_cat = db.Column(db.Integer , db.ForeignKey('category.id'))
     
-            
     def __init__ (self , services, category):
         
         self.services = services
@@ -49,9 +48,9 @@ class categorySchema(marsh.Schema):
     
     class Meta:
         
-        fields = ('id' , 'name_cat')
+        fields = ('id' , 'category_name')
         
-class productSchema(marsh.Schema):
+class servicesSchema(marsh.Schema):
     
     class Meta:
         
@@ -59,18 +58,41 @@ class productSchema(marsh.Schema):
 
 cat_sche = categorySchema(many = True)
 
-pro_sche = productSchema(many = True)
+services_sche = servicesSchema(many = True)
         
 @app.route('/get_data' , methods = ['GET'])
 def get_data():
-    
+        
+    em_list =  []
+            
     category_list = Category.query.all()
     
-    list_json = cat_sche.dump(category_list)
+    for i in category_list:
+                
+        services_list = [j.services for j in i.services]
+                
+        em_list.append({
+            
+            'id':i.id,
+            
+            'category_name':i.category_name,
+            
+            'services': services_list
+        })
+                     
+    return jsonify(em_list)
+
+@app.route('/Add-Category' , methods = ['POST'])
+def add_category():
     
-    print(list_json)
+    category_name = request.form['category_name']
     
-    return jsonify(list_json)
+    db.session.add(Category(category_name))
+    
+    db.session.commit()
+    
+    return jsonify({'messages':'Completed!'})
+    
 
 # @app.route('/get_data_services/<int:id>' , methods = ['GET'])
 # def get_data_services(id):
@@ -87,4 +109,4 @@ def get_data():
 
 if __name__ == '__main__':
     
-    app.run(host='localhost' , port=3000 , debug = True)
+    app.run(host='127.0.0.1',port=5000 , debug = True)
