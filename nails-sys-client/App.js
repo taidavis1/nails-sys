@@ -1,71 +1,53 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { registerRootComponent } from 'expo';
+import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+//! themes -> useTheme
+import theme from './themes/Light';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
+//! imp AppNavigation
+import { AppNavigator } from './navigation';
 
-// import useCachedResources from './hooks/useCachedResources';
-//!expo
-import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
-
-//! comps
-import MainScreen from './screens/MainScreen';
-import AuthScreen from './screens/AuthScreen';
-import CategoryScreen from './screens/CategoryScreen';
-import HomeScreen from './screens/MainScreen';
-import SettingScreen from './screens/SettingScreen'
-
-const App = () => {
-    const [isLoadingComplete, setIsLoadingComplete] = React.useState(false);
-
-    const fetchFonts = async () => {
-        await Font.loadAsync({
-            'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
-            'Roboto-BlackItalic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
-            'roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
-            'Roboto-BoldItalic': require('./assets/fonts/Roboto-BoldItalic.ttf'),
-            'Roboto-Italic': require('./assets/fonts/Roboto-Italic.ttf'),
-            'Roboto-Light': require('./assets/fonts/Roboto-Light.ttf'),
-            'Roboto-LightItalic': require('./assets/fonts/Roboto-Light.ttf'),
-            'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
-            'Roboto-MediumItalic': require('./assets/fonts/Roboto-MediumItalic.ttf'),
-            'roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-            'roboto-Thin': require('./assets/fonts/Roboto-Thin.ttf'),
-            'Roboto-ThinItalic': require('./assets/fonts/Roboto-ThinItalic.ttf'),
-        });
+export default function App() {
+    const styles = {
+        container: {
+            flex: 1,
+            marginTop: StatusBar.currentHeight,
+            paddingBottom: StatusBar.currentHeight / 2,
+            //! Barbottom
+            backgroundColor: theme.colors.primary,
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+        },
+        innerContainer: {
+            justifyContent: 'flex-start',
+            padding: 15,
+        },
+        avatar: {
+            width: 60,
+            height: 60,
+            borderRadius: 10,
+            // marginTop: 10,
+        },
+        username: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: theme.colors.black,
+        },
     };
 
-    if (!isLoadingComplete) {
-        return <AppLoading startAsync={() => fetchFonts()} onFinish={() => setIsLoadingComplete(true)} onError={() => console.warn} />;
-    }
-
-    // const Stack = createNativeStackNavigator();
-    const Drawer = createDrawerNavigator();
-
     return (
-        <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Main">
-                <Drawer.Screen name="Main" component={MainScreen}/>
-                <Drawer.Screen name="Auth" component={AuthScreen}/>
-                <Drawer.Screen name="Setting" component={SettingScreen}/>
-                <Drawer.Screen name="Category" component={CategoryScreen} />
-            </Drawer.Navigator>
-        </NavigationContainer>
+        <Provider store={store}>
+            <SafeAreaView style={style.container}>
+                <AppNavigator />
+            </SafeAreaView>
+        </Provider>
     );
-};
+}
 
-registerRootComponent(App);
-
-export default App;
-
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+        marginTop: StatusBar.currentHeight,
     },
 });

@@ -5,6 +5,7 @@ module.exports = function (api) {
         plugins: ['react-native-reanimated/plugin'],
     };
 };
+
 // module.exports = function (api) {
 //     api.cache(true);
 //     return {
