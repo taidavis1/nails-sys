@@ -36,7 +36,12 @@ const CreateServiceModal = (props) => {
     const COLORS = ['red', 'purple', 'blue', 'cyan', 'green', 'yellow', 'orange', 'black', 'white'];
     const pickedColor = useSharedValue(COLORS[0]);
 
-    const [image, setImage] = React.useState(null);
+    const [image, setImage] = React.useState({
+        height: 0,
+        width: 0,
+        type: '',
+        url: '',
+    });
 
     const [itemCats, setItemCats] = React.useState();
     const [itemSubs, setItemSubs] = React.useState();
@@ -69,6 +74,8 @@ const CreateServiceModal = (props) => {
 
     const createFormData = (photo, body = {}) => {
         const formData = new FormData();
+        console.log(`photo: `, photo);
+        console.log(`body: `, body);
         formData.append('image', {
             name: photo.fileName,
             type: photo.type,
@@ -120,16 +127,17 @@ const CreateServiceModal = (props) => {
     };
 
     const handleCreate = () => {
-        addServiceAsync({
-            name: values.name,
-            displayName: values.displayName,
-            price: values.price,
-            commission: values.commission,
-            color: values.color,
-            photo: values.photo,
-            subCategory: valueSub,
-            category: valueCat,
-        });
+        // addServiceAsync({
+        //     name: values.name,
+        //     displayName: values.displayName,
+        //     price: values.price,
+        //     commission: values.commission,
+        //     color: values.color,
+        //     photo: values.photo,
+        //     subCategory: valueSub,
+        //     category: valueCat,
+        // });
+        addServiceAsync(createFormData(image, values));
         hideModal();
     };
 

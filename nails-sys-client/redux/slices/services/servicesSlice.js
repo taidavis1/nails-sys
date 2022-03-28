@@ -75,9 +75,13 @@ export const addServiceAsync = createAsyncThunk('services/addServiceAsync', asyn
 
     const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${category}/${subCategory}`), {
         method: 'POST',
+        // headers: {
+        //     'Content-Type': 'application/json',
+        // },
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
         },
+
         body: JSON.stringify(payload),
     });
 
