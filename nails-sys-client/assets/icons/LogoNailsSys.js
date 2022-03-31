@@ -14,6 +14,7 @@ const LogoNailsSys = (props) => {
                 enableBackground: 'new 0 0 356 334.6',
             }}
             xmlSpace="preserve"
+            width={props.width || 50} height={props.height || 50}
             {...props}
         >
             <Path

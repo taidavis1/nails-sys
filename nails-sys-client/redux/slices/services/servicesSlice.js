@@ -67,28 +67,28 @@ export const addSubCategoryAsync = createAsyncThunk('services/addSubCategoryAsyn
 
 //! CREATE Service
 export const addServiceAsync = createAsyncThunk('services/addServiceAsync', async (payload, { getState }) => {
-    // const { serviceCategoryId, subCategoryId } = getState().modal.modalProps; //! OK
-    const { category, subCategory } = payload;
+    //! Try catch
+    const { subCategoryId, categoryId } = payload;
+    console.log(`categoryId: `, categoryId);
+    console.log(`subCategoryId: `, subCategoryId);
+    console.log(`payload`, payload);
 
     // console.log(`servicesSlice - serviceCategoryId : `, serviceCategoryId);
     // console.log(`servicesSlice - payload: `, payload);
 
-    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${category}/${subCategory}`), {
+    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${categoryId}/${subCategoryId}`), {
         method: 'POST',
         // headers: {
-        //     'Content-Type': 'application/json',
+        //     'Content-Type': 'multipart/form-data',
         // },
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
 
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload.service),
     });
 
-    if (response.ok) {
-        const { service } = await response.json();
-        return { ...service, category: category };
-    }
+    // if (response.ok) {
+    //     const { service } = await response.json();
+    //     return { ...service, category: category };
+    // }
 });
 
 //! DELETE Service

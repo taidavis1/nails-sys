@@ -157,7 +157,11 @@ const createSubCategory = async (req, res) => {
 
 const createService = async (req, res, next) => {
     try {
-        const { name, displayName, price, commission, color, photo } = req.body;
+        // if (req.file === undefined) return res.send("you must select a file.");
+
+        console.log(`req.file: `, req.file);
+        console.log(`req.body: `, req.body);
+        const { name, displayName, price, commission, color, photo } = req.body.service;
         const { serviceCategoryId, subCategoryId } = req.params;
 
         let existService = await Service.findOne({ name });

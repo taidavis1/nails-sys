@@ -19,7 +19,7 @@ router.post('/', servicesController.createServiceCategory);
 router.post('/:serviceCategoryId', servicesController.createSubCategory);
 //! CREATE Service + Middleware Multer (Upload Image)
 // router.post('/:serviceCategoryId/:subCategoryId', servicesController.createService);
-router.post('/:serviceCategoryId/:subCategoryId', upload.single('image'), servicesController.createService);
+router.post('/:serviceCategoryId/:subCategoryId', upload.single('photo'), servicesController.createService);
 //! DELETE Service within Category
 router.delete('/:serviceCategoryId/:serviceId', servicesController.deleteService);
 //! UPDATE Service within Category

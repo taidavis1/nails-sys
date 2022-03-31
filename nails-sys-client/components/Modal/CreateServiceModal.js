@@ -36,13 +36,6 @@ const CreateServiceModal = (props) => {
     const COLORS = ['red', 'purple', 'blue', 'cyan', 'green', 'yellow', 'orange', 'black', 'white'];
     const pickedColor = useSharedValue(COLORS[0]);
 
-    const [image, setImage] = React.useState({
-        height: 0,
-        width: 0,
-        type: '',
-        url: '',
-    });
-
     const [itemCats, setItemCats] = React.useState();
     const [itemSubs, setItemSubs] = React.useState();
     const [openCat, setOpenCat] = React.useState(false);
@@ -52,10 +45,19 @@ const CreateServiceModal = (props) => {
     const [values, setValues] = React.useState({
         name: '',
         displayName: '',
-        price: 0,
+        price: 50,
         commission: 0,
         color: '',
-        photo: '',
+        subCategory: subCategoryId,
+        category: serviceCategoryId,
+    });
+
+    const [photo, setPhoto] = React.useState({
+        fileName: '',
+        height: 0,
+        width: 0,
+        type: '',
+        uri: '',
     });
 
     React.useEffect(() => {
@@ -70,14 +72,14 @@ const CreateServiceModal = (props) => {
 
         setItemCats(arrCats);
         setItemSubs(arrSubs);
-    }, [valueCat]);
+
+        setValues({ ...values, subCategory: valueSub, category: valueCat });
+    }, [valueSub, valueCat]);
 
     const createFormData = (photo, body = {}) => {
         const formData = new FormData();
-        console.log(`photo: `, photo);
-        console.log(`body: `, body);
-        formData.append('image', {
-            name: photo.fileName,
+        formData.append('photo', {
+            fileName: photo.fileName,
             type: photo.type,
             uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
         });
@@ -85,6 +87,8 @@ const CreateServiceModal = (props) => {
         Object.keys(body).forEach((key) => {
             formData.append(key, body[key]);
         });
+
+        return formData;
     };
 
     const requestMediaLibraryPermissions = async () => {
@@ -108,12 +112,18 @@ const CreateServiceModal = (props) => {
             aspect: [4, 3],
             quality: 1,
         });
-        console.log(`result Image: `, result);
+        // console.log(`result Image: `, result);
         if (!result.cancelled) {
-            setImage({
+            let localUri = result.uri;
+            let fileName = localUri.split('/').pop();
+            // Infer the type of the image
+            let match = /\.(\w+)$/.exec(fileName);
+            let type = match ? `image/${match[1]}` : `image`;
+            setPhoto({
+                fileName: fileName,
                 height: result.height,
                 width: result.width,
-                type: result.type,
+                type: type,
                 uri: result.uri,
             });
         }
@@ -137,7 +147,11 @@ const CreateServiceModal = (props) => {
         //     subCategory: valueSub,
         //     category: valueCat,
         // });
-        addServiceAsync(createFormData(image, values));
+        addServiceAsync({
+            service: createFormData(photo, values),
+            subCategoryId: valueSub,
+            categoryId: valueCat,
+        });
         hideModal();
     };
 
@@ -157,12 +171,10 @@ const CreateServiceModal = (props) => {
     let buttonStyles = [styles.button, { color: theme.colors.success }];
     let gradientStyles = [styles.gradient, { width: PICKER_WIDTH }];
 
-    // Just like "@media screen and (max-width: 350px)"
     if (DIM_WIDTH < 480) {
         containerStyles = [styles.containerSmall, { backgroundColor: theme.colors.background }];
         inputControlStyles = styles.inputControlSmall;
     }
-    // <Animated.View style={[{ borderWidth: 1, height: 20, width: 40 }, rStyle]} />
 
     // const GestureHandlerRootViewNative =
     //     Platform.OS === 'android'
@@ -230,12 +242,12 @@ const CreateServiceModal = (props) => {
             <View style={[inputControlStyles, { marginTop: 60, flexDirection: 'row' }]}>
                 <View style={{ flex: 1 }}>
                     <Text>Upload photo:</Text>
-                    <TouchableOpacity style={{ backgroundColor: 'red', padding: 10, width: '80%' }} onPress={() => pickImage()}>
-                        <Text style={{ color: 'black' }}>Upload Select</Text>
+                    <TouchableOpacity style={{ backgroundColor: '#044cd0', padding: 10, width: '80%' }} onPress={() => pickImage()}>
+                        <Text style={{ color: 'white' }}>Upload Select</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={[{ borderWidth: 1, height: 80, width: 100, flex: 1 }]}>
-                    {image && <Image source={{ uri: image.uri }} style={styles.image} />}
+                    {/* {photo.uri && <Image source={{ uri: photo.uri }} style={styles.image} />} */}
                 </View>
             </View>
             <View style={[inputControlStyles]}>
