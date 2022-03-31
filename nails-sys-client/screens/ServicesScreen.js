@@ -22,6 +22,7 @@ const ServicesScreen = (props) => {
 
     const nCount = React.useRef(0);
     console.log(`ServicesScreen -> render:`, (nCount.current += 1));
+    // console.log(`props.serviceCategories: `, props.serviceCategories);
 
     React.useEffect(() => {
         let isSubscribed = true;

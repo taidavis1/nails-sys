@@ -40,7 +40,7 @@ const ServiceCategoryItem = (props) => {
     return (
         <TouchableOpacity activeOpacity={0.5} onPress={() => handleTouch()}>
             <View style={{ ...styles.item, ...style }}>
-                <Text style={styles.itemText}>{serviceCategory.category_name}</Text>
+                <Text style={styles.itemText}>{serviceCategory.name}</Text>
             </View>
         </TouchableOpacity>
     );

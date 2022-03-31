@@ -41,9 +41,10 @@ function PanelCategories(props) {
                     renderItem={({ item }) => (
                         <ServiceCategoryItem
                             // colorButton={item.color}
-                            title={'item.category_name'}
+                            name={item.name}
                             // activeIndex={props.selectedCat}
                             index={item.id}
+                            style={styles.catItem}
                             // onPress={() => {
                             //     console.log(`catItemId: `, item._id);
                             //     props.setSelectedCat(item._id);
@@ -54,7 +55,7 @@ function PanelCategories(props) {
                 />
             )}
             <ServiceCategoryItem
-                title="ALL"
+                name="ALL"
                 index="all"
                 activeIndex={props.selectedCat}
                 colorButton="#151c47"
@@ -64,14 +65,14 @@ function PanelCategories(props) {
                 }}
             />
             <ServiceCategoryItem
-                title="+"
+                name="+"
                 index="add"
                 colorButton="#151c47"
                 style={styles.catItem}
-                onPress={() => {
-                    console.log(`ServicesStack - CREATE_SERVICE_CATEGORY_MODAL`);
-                    props.showModal({ modalId: 'CREATE_SERVICE_CATEGORY_MODAL' });
-                }}
+                // onPress={() => {
+                //     console.log(`ServicesStack - CREATE_SERVICE_CATEGORY_MODAL`);
+                //     props.showModal({ modalId: 'CREATE_SERVICE_CATEGORY_MODAL' });
+                // }}
             />
         </View>
     );

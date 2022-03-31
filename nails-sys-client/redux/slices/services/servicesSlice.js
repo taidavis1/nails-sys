@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { PlatformBaseUrl } from '../../../utils';
+// import { PlatformBaseUrl } from '../../../utils';
 
 const initialState = {
     isLoading: false,
@@ -16,6 +16,7 @@ function prepend(value, array) {
 // ! GET ALL ServiceCategory
 export const getServiceCategoriesAsync = createAsyncThunk('services/getServiceCategoriesAsync', async () => {
     const response = await fetch('http://127.0.0.1:5000/get_data');
+    console.log(response);
     if (response.ok) {
         // const {categories} = await response.json();
         // return categories; // payload Action
@@ -134,7 +135,6 @@ const servicesSlice = createSlice({
         });
         builder.addCase(getServiceCategoriesAsync.fulfilled, (state, action) => {
             console.log('getServiceCategoriesAsync.fulfilled');
-            console.log(state.serviceCategories)
             state.serviceCategories = action.payload;
 
         });

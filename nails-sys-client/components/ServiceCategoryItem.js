@@ -17,7 +17,7 @@ const ServiceCategoryItem = (props) => {
                     },
                 ]}
             >
-                <Text style={[styles.itemText, { color: props.style?.color }]}>{props.title}</Text>
+                <Text style={[styles.itemText, { color: props.style.color }]}>{props.name}</Text>
             </View>
         </TouchableOpacity>
     );

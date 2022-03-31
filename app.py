@@ -75,7 +75,7 @@ def get_data():
             
             'id':i.id,
             
-            'category_name':i.category_name,
+            'name':i.category_name,
             
             'services': services_list
         })
@@ -105,7 +105,7 @@ def add_category():
     
 #     return jsonify(list_json)
             
-############################
+################################
 
 if __name__ == '__main__':
     

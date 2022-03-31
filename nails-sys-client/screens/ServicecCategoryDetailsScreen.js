@@ -18,12 +18,12 @@ const ServicecCategoryDetailsScreen = (props) => {
 
     React.useEffect(() => {
         getServiceCategoriesAsync();
-        setModalProps({ serviceCategoryId: route.params?._id });
+        setModalProps({ serviceCategoryId: route.params.id });
     }, []);
 
     // console.log(`ServicecCategoryDetailsScreen - route.params?._id: `, route.params?._id) //! OK
     //! ERROR
-    const selectedServiceCategory = serviceCategories.find((sc) => sc._id === route.params?._id);
+    const selectedServiceCategory = serviceCategories.find((sc) => sc._id === route.params.id);
 
     const formatData = (data, numColumns) => {
         let numberOfFullRows = Math.floor(data.length / numColumns); //! chia lay nguyen

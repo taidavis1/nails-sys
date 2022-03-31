@@ -1,9 +1,24 @@
-import { StyleSheet, View, Text, Dimensions, TextInput, TouchableOpacity } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Dimensions,
+    TextInput,
+    TouchableOpacity,
+    requireNativeComponent,
+    ViewPropTypes,
+    Platform,
+    Image,
+} from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import React from 'react';
 import theme from '../../themes/Light';
 import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
+import * as ImagePicker from 'expo-image-picker';
+
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 //! imp Comps
 import ColorPicker from '../ColorPicker';
 
@@ -20,6 +35,8 @@ const CreateServiceModal = (props) => {
 
     const COLORS = ['red', 'purple', 'blue', 'cyan', 'green', 'yellow', 'orange', 'black', 'white'];
     const pickedColor = useSharedValue(COLORS[0]);
+
+    const [image, setImage] = React.useState(null);
 
     const [itemCats, setItemCats] = React.useState();
     const [itemSubs, setItemSubs] = React.useState();
@@ -50,6 +67,33 @@ const CreateServiceModal = (props) => {
         setValues({ ...values, color: pickedColor.value });
     }, [pickedColor.value]);
 
+    const requestMediaLibraryPermissions = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+        }
+    };
+
+    React.useEffect(() => {
+        if (Platform.OS !== 'web') {
+            requestMediaLibraryPermissions();
+        }
+    }, []);
+    
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        console.log(`onImagePickerPress`, result);
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
+
     const handleChange = (name, type, value) => {
         setValues({
             ...values,
@@ -70,7 +114,7 @@ const CreateServiceModal = (props) => {
         });
         hideModal();
     };
-    
+
     const onColorChanged = React.useCallback((color) => {
         'worklet';
         pickedColor.value = color;
@@ -94,8 +138,20 @@ const CreateServiceModal = (props) => {
     }
     // <Animated.View style={[{ borderWidth: 1, height: 20, width: 40 }, rStyle]} />
 
+    // const GestureHandlerRootViewNative =
+    //     Platform.OS === 'android'
+    //         ? requireNativeComponent(
+    //               'GestureHandlerRootView',
+    //               // @ts-note: TS is saying only one arg supported. I tested one arg, and it
+    //               // works. But I copied this from
+    //               // `node_modules/react-native-gesture-handler/GestureHandlerRootView.android.js`
+    //               // and they use this 2nd argument, so I'm keeping it.
+    //               { name: 'GestureHandlerRootView', propTypes: { ...ViewPropTypes } }
+    //           )
+    //         : View;
+
     return (
-        <View style={containerStyles}>
+        <GestureHandlerRootView style={containerStyles}>
             <View style={styles.title}>
                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Create A Service Category</Text>
             </View>
@@ -134,7 +190,7 @@ const CreateServiceModal = (props) => {
                     <Text>Pick color: </Text>
                     <Animated.View style={[{ borderWidth: 1, height: 20, width: 40 }, rStyle]} />
                 </View>
-                <View style={{ marginTop: 50 }}>
+                <View style={{ marginTop: 30 }}>
                     <ColorPicker
                         colors={COLORS}
                         start={{ x: 0, y: 0 }}
@@ -145,15 +201,22 @@ const CreateServiceModal = (props) => {
                     />
                 </View>
             </View>
-            <View style={[inputControlStyles, { marginTop: 60 }]}>
-                <Text>Upload photo:</Text>
-                <TextInput style={styles.input} onChangeText={(evt) => handleChange('photo', 'text', evt)} value={values.photo} />
+            <View style={[inputControlStyles, { marginTop: 60, flexDirection: 'row' }]}>
+                <View style={{ flex: 1 }}>
+                    <Text>Upload photo:</Text>
+                    <TouchableOpacity style={{ backgroundColor: 'red', padding: 10, width: '80%' }} onPress={() => pickImage()}>
+                        <Text style={{ color: 'black' }}>Upload Select</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={[{ borderWidth: 1, height: 80, width: 100, flex: 1 }]}>
+                    {image && <Image source={{ uri: image }} style={styles.image} />}
+                </View>
             </View>
-            <View style={[inputControlStyles, { zIndex: 20 }]}>
+            <View style={[inputControlStyles]}>
                 <Text>Category:</Text>
                 <DropDownPicker open={openCat} setOpen={setOpenCat} value={valueCat} setValue={setValueCat} items={itemCats} />
             </View>
-            <View style={[inputControlStyles, { zIndex: 10 }]}>
+            <View style={[inputControlStyles]}>
                 <Text>SubCategory:</Text>
                 <DropDownPicker open={openSub} setOpen={setOpenSub} value={valueSub} setValue={setValueSub} items={itemSubs} />
             </View>
@@ -165,14 +228,14 @@ const CreateServiceModal = (props) => {
                     <Text style={buttonStyles}>Close</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </GestureHandlerRootView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        width: '70%',
-        height: 400,
+        width: '80%',
+        height: 600,
         borderRadius: 10,
         padding: 10,
     },
@@ -198,7 +261,7 @@ const styles = StyleSheet.create({
     },
     inputControl: {
         flex: 1,
-        margin: 5,
+        marginVertical: 5,
     },
     inputControlSmall: {
         flex: 1,
@@ -208,6 +271,10 @@ const styles = StyleSheet.create({
         height: 30,
         width: '100%',
         borderRadius: 15,
+    },
+    image: {
+        resizeMode: 'cover',
+        flex: 1,
     },
 });
 

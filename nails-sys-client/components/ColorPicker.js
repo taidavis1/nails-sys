@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PanGestureHandler } from 'react-native-gesture-handler';
+
 import Animated, {
     color,
     interpolateColor,
