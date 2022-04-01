@@ -18,17 +18,37 @@ marsh = Marshmallow(app)
 
 db = SQLAlchemy(app)
 
+# class Subcat(db.Model):
+    
+#     id = db.Column(db.Integer , primary_key = True)
+    
+#     sub_name = db.Column(db.String(50) , nullable = False)
+    
+#     color = db.Column(db.String(50) , nullable = False)
+
+#     category = db.relationship('Category' , backref = 'category')
+    
+#     services = db.relationship('Services' , backref = 'services')
+    
+#     def __init__ (self , )
+    
 class Category(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
     
     category_name = db.Column(db.String(50) , nullable = False)
     
+    color = db.Column(db.String(50) , nullable = False)
+    
+    # subcategories = db.Column(db.Integer , db.ForeignKey('subcat.id'))
+    
     services = db.relationship('Services' , backref = 'category')
     
-    def __init__ (self , category_name):
+    def __init__ (self , category_name , color):
         
         self.category_name = category_name
+        
+        self.color = color
 
 class Services(db.Model):
     
@@ -48,13 +68,15 @@ class categorySchema(marsh.Schema):
     
     class Meta:
         
-        fields = ('id' , 'category_name')
+        fields = ('id' , 'category_name' , 'color')
         
 class servicesSchema(marsh.Schema):
     
     class Meta:
         
         fields = ('id' ,'services' , 'name_cat')
+        
+cat_sche = categorySchema()
 
 cat_sche = categorySchema(many = True)
 
@@ -77,21 +99,28 @@ def get_data():
             
             'name':i.category_name,
             
+            'color': i.color,
+            
             'services': services_list
         })
                      
     return jsonify(em_list)
 
-@app.route('/Add-Category' , methods = ['POST'])
+@app.route('/Add_Category' , methods = ['POST'])
 def add_category():
+    category_name = request.json['name']
     
-    category_name = request.form['category_name']
+    color = request.json['color']
     
-    db.session.add(Category(category_name))
+    cat_add = Category(category_name , color)
+    
+    db.session.add(cat_add)
     
     db.session.commit()
     
-    return jsonify({'messages':'Completed!'})
+    print(cat_sche.jsonify(cat_add))
+    
+    return cat_sche.jsonify(cat_add)
     
 
 # @app.route('/get_data_services/<int:id>' , methods = ['GET'])

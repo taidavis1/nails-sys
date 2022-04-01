@@ -14,116 +14,114 @@ function prepend(value, array) {
 }
 
 // ! GET ALL ServiceCategory
-export const getServiceCategoriesAsync = createAsyncThunk('services/getServiceCategoriesAsync', async () => {
-    const response = await fetch('http://127.0.0.1:5000/get_data');
-    console.log(response);
+export const getServiceCategoriesAsync = createAsyncThunk('services/getServiceCategoriesAsync', async (thunkAPI) => {
+    const response = await fetch('http://127.0.0.1:5000/get_data').then( (data) => data.json() )
+    return response;
+});
+
+//! CREATE ServiceCategory
+export const addServiceCategoryAsync = createAsyncThunk('services/addServiceCategoryAsync', async (payload) => {
+    // console.log(`servicesSlice - addServiceCategoryAsync: `, payload);
+    const response = await fetch('http://127.0.0.1:5000/Add_Category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: payload.name, color: payload.color })
+    })
+
     if (response.ok) {
-        // const {categories} = await response.json();
-        // return categories; // payload Action
-        const { serviceCategories } = await response.json();
-        return serviceCategories; // payload Action
+
+        const { serviceCategory } = await response.json();
+
+        return serviceCategory;
     }
 });
 
-// //! CREATE ServiceCategory
-// export const addServiceCategoryAsync = createAsyncThunk('services/addServiceCategoryAsync', async (payload) => {
-//     // console.log(`servicesSlice - addServiceCategoryAsync: `, payload);
-//     const response = await fetch('http://127.0.0.1:5000/Add-Category'), {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         //! payload : {name, color}
-//         body: JSON.stringify({ name: payload.name, color: payload.color }),
-//     });
-
-//     if (response.ok) {
-//         const { serviceCategory } = await response.json();
-//         // const { category } = data;
-//         return serviceCategory; //! return Action 1 Array
-//     }
-// });
-
 //! CREATE SubCategory
 
-// export const addSubCategoryAsync = createAsyncThunk('services/addSubCategoryAsync', async (payload, { getState }) => {
-//     //! addSubCategoryAsync({}) -> { name}
-//     const { serviceCategoryId } = getState().modal.modalProps; //! OK
-//     console.log(`modalsprops serviceCategoryId `, serviceCategoryId);
-//     const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}`), {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         //! payload : {name, color}
-//         body: JSON.stringify({ name: payload.name }),
-//     });
+export const addSubCategoryAsync = createAsyncThunk('services/addSubCategoryAsync', async (payload, { getState }) => {
+    //! addSubCategoryAsync({}) -> { name}
+    const { serviceCategoryId } = getState().modal.modalProps; //! OK
+    console.log(`modalsprops serviceCategoryId `, serviceCategoryId);
+    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}`), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        //! payload : {name, color}
+        body: JSON.stringify({ name: payload.name }),
+    });
 
-//     if (response.ok) {
-//         const { subCategory } = await response.json();
-//         // const { category } = data;
-//         return subCategory; //! return Action 1 Array
-//     }
-// });
+    if (response.ok) {
+        const { subCategory } = await response.json();
+        // const { category } = data;
+        return subCategory; //! return Action 1 Array
+    }
+});
 
-// //! CREATE Service
-// export const addServiceAsync = createAsyncThunk('services/addServiceAsync', async (payload, { getState }) => {
-//     // const { serviceCategoryId, subCategoryId } = getState().modal.modalProps; //! OK
-//     const { category, subCategory } = payload;
+//! CREATE Service
+export const addServiceAsync = createAsyncThunk('services/addServiceAsync', async (payload, { getState }) => {
+    // const { serviceCategoryId, subCategoryId } = getState().modal.modalProps; //! OK
+    const { category, subCategory } = payload;
 
-//     // console.log(`servicesSlice - serviceCategoryId : `, serviceCategoryId);
-//     // console.log(`servicesSlice - payload: `, payload);
+    // console.log(`servicesSlice - serviceCategoryId : `, serviceCategoryId);
+    // console.log(`servicesSlice - payload: `, payload);
 
-//     const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${category}/${subCategory}`), {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(payload),
-//     });
+    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${category}/${subCategory}`), {
+        method: 'POST',
+        // headers: {
+        //     'Content-Type': 'application/json',
+        // },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
 
-//     if (response.ok) {
-//         const { service } = await response.json();
-//         return { ...service, category: category };
-//     }
-// });
+        body: JSON.stringify(payload),
+    });
 
-// //! DELETE Service
-// export const removeServiceAsync = createAsyncThunk('services/removeServiceAsync', async (payload, { getState }) => {
-//     const { serviceCategoryId, serviceId } = getState().modal.modalProps;
+    if (response.ok) {
+        const { service } = await response.json();
+        return { ...service, category: category };
+    }
+});
 
-//     const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}/${serviceId}`), {
-//         method: 'DELETE',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ serviceId }),
-//     });
+//! DELETE Service
+export const removeServiceAsync = createAsyncThunk('services/removeServiceAsync', async (payload, { getState }) => {
+    const { serviceCategoryId, serviceId } = getState().modal.modalProps;
 
-//     if (response.ok) {
-//         const { service } = await response.json();
-//         return service;
-//     }
-// });
+    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}/${serviceId}`), {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serviceId }),
+    });
 
-// //! UPDATE Service
-// export const updateServiceAsync = createAsyncThunk('services/updateServiceAsync', async (payload, { getState }) => {
-//     const { serviceCategoryId, serviceId } = getState().modal.modalProps;
-//     const { name, price, description } = payload;
+    if (response.ok) {
+        const { service } = await response.json();
+        return service;
+    }
+});
 
-//     const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}/${serviceId}`), {
-//         method: 'PATCH',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ name, price, description }),
-//     });
+//! UPDATE Service
+export const updateServiceAsync = createAsyncThunk('services/updateServiceAsync', async (payload, { getState }) => {
+    const { serviceCategoryId, serviceId } = getState().modal.modalProps;
+    const { name, price, description } = payload;
 
-//     if (response.ok) {
-//         const { updatedService } = await response.json();
-//         return updatedService; //! return a Object
-//     }
-// });
+    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}/${serviceId}`), {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, price, description }),
+    });
+
+    if (response.ok) {
+        const { updatedService } = await response.json();
+        return updatedService; //! return a Object
+    }
+});
 
 const servicesSlice = createSlice({
     name: 'services',

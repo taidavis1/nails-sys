@@ -40,16 +40,16 @@ function PanelCategories(props) {
                     data={props.serviceCategories}
                     renderItem={({ item }) => (
                         <ServiceCategoryItem
-                            // colorButton={item.color}
+                            colorButton={item.color}
                             name={item.name}
                             // activeIndex={props.selectedCat}
                             index={item.id}
                             style={styles.catItem}
-                            // onPress={() => {
-                            //     console.log(`catItemId: `, item._id);
-                            //     props.setSelectedCat(item._id);
-                            //     props.setSelectedSubCat('all');
-                            // }}
+                            onPress={() => {
+                                console.log(`catItemId: `, item._id);
+                                props.setSelectedCat(item._id);
+                                props.setSelectedSubCat('all');
+                            }}
                         />
                     )}
                 />
@@ -69,10 +69,10 @@ function PanelCategories(props) {
                 index="add"
                 colorButton="#151c47"
                 style={styles.catItem}
-                // onPress={() => {
-                //     console.log(`ServicesStack - CREATE_SERVICE_CATEGORY_MODAL`);
-                //     props.showModal({ modalId: 'CREATE_SERVICE_CATEGORY_MODAL' });
-                // }}
+                onPress={() => {
+                    console.log(`ServicesStack - CREATE_SERVICE_CATEGORY_MODAL`);
+                    props.showModal({ modalId: 'CREATE_SERVICE_CATEGORY_MODAL' });
+                }}
             />
         </View>
     );
