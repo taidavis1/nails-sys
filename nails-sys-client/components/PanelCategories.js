@@ -46,8 +46,8 @@ function PanelCategories(props) {
                             index={item.id}
                             style={styles.catItem}
                             onPress={() => {
-                                console.log(`catItemId: `, item._id);
-                                props.setSelectedCat(item._id);
+                                console.log(`catItemId: `, item.id);
+                                props.setSelectedCat(item.id);
                                 props.setSelectedSubCat('all');
                             }}
                         />

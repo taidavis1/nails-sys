@@ -71,16 +71,16 @@ function PanelServices(props) {
                     {subCategories &&
                         subCategories.map((item) => (
                             <SubCategoryItem
-                                key={item._id}
+                                key={item.id}
                                 title={item.name}
-                                index={item._id}
+                                index={item.id}
                                 activeIndex={props.selectedSubCat}
                                 colorButton="#151c47"
                                 // style={styles.subCategoryItem}
                                 style={styles.subCatItem}
                                 onPress={() => {
-                                    console.log(`subCatId: `, item._id);
-                                    props.setSelectedSubCat(item._id);
+                                    console.log(`subCatId: `, item.id);
+                                    props.setSelectedSubCat(item.id);
                                 }}
                             />
                         ))}

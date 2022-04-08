@@ -64,28 +64,28 @@ const CreateServiceModal = (props) => {
 
     React.useEffect(() => {
         let categories = props.serviceCategories;
-        let arrCats = categories.map((cat) => ({ label: cat.name, value: cat._id }));
-        let catIndex = categories.findIndex((item) => item._id === valueCat);
-        let arrSubs = categories[catIndex].subCategories.map((sub) => ({ label: sub.name, value: sub._id }));
+        let arrCats = categories.map((cat) => ({ label: cat.name, value: cat.id }));
+        let catIndex = categories.findIndex((item) => item.id === valueCat);
+        // let arrSubs = categories[catIndex].subCategories.map((sub) => ({ label: sub.name, value: sub._id }));
 
         setItemCats(arrCats);
-        setItemSubs(arrSubs);
+        // setItemSubs(arrSubs);
     }, [valueCat]);
 
-    const createFormData = (photo, body = {}) => {
-        const formData = new FormData();
-        console.log(`photo: `, photo);
-        console.log(`body: `, body);
-        formData.append('image', {
-            name: photo.fileName,
-            type: photo.type,
-            uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
-        });
+    // const createFormData = (photo, body = {}) => {
+    //     const formData = new FormData();
+    //     console.log(`photo: `, photo);
+    //     console.log(`body: `, body);
+    //     // formData.append('image', {
+    //     //     name: photo.fileName,
+    //     //     type: photo.type,
+    //     //     uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+    //     // });
 
-        Object.keys(body).forEach((key) => {
-            formData.append(key, body[key]);
-        });
-    };
+    //     Object.keys(body).forEach((key) => {
+    //         formData.append(key, body[key]);
+    //     });
+    // };
 
     const requestMediaLibraryPermissions = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -100,24 +100,24 @@ const CreateServiceModal = (props) => {
         }
     }, []);
 
-    const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-        console.log(`result Image: `, result);
-        if (!result.cancelled) {
-            setImage({
-                height: result.height,
-                width: result.width,
-                type: result.type,
-                uri: result.uri,
-            });
-        }
-    };
+    // const pickImage = async () => {
+    //     // No permissions request is necessary for launching the image library
+    //     let result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //         allowsEditing: true,
+    //         aspect: [4, 3],
+    //         quality: 1,
+    //     });
+    //     console.log(`result Image: `, result);
+    //     if (!result.cancelled) {
+    //         setImage({
+    //             height: result.height,
+    //             width: result.width,
+    //             type: result.type,
+    //             uri: result.uri,
+    //         });
+    //     }
+    // };
 
     const handleChange = (name, type, value) => {
         setValues({
@@ -137,7 +137,7 @@ const CreateServiceModal = (props) => {
         //     subCategory: valueSub,
         //     category: valueCat,
         // });
-        addServiceAsync(createFormData(image, values));
+        // addServiceAsync(createFormData(image, values));
         hideModal();
     };
 
@@ -227,7 +227,7 @@ const CreateServiceModal = (props) => {
                     />
                 </View>
             </View>
-            <View style={[inputControlStyles, { marginTop: 60, flexDirection: 'row' }]}>
+            {/* <View style={[inputControlStyles, { marginTop: 60, flexDirection: 'row' }]}>
                 <View style={{ flex: 1 }}>
                     <Text>Upload photo:</Text>
                     <TouchableOpacity style={{ backgroundColor: 'red', padding: 10, width: '80%' }} onPress={() => pickImage()}>
@@ -237,7 +237,7 @@ const CreateServiceModal = (props) => {
                 <View style={[{ borderWidth: 1, height: 80, width: 100, flex: 1 }]}>
                     {image && <Image source={{ uri: image.uri }} style={styles.image} />}
                 </View>
-            </View>
+            </View> */}
             <View style={[inputControlStyles]}>
                 <Text>Category:</Text>
                 <DropDownPicker open={openCat} setOpen={setOpenCat} value={valueCat} setValue={setValueCat} items={itemCats} />

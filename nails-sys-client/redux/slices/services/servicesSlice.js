@@ -43,15 +43,15 @@ export const addServiceCategoryAsync = createAsyncThunk('services/addServiceCate
 export const addSubCategoryAsync = createAsyncThunk('services/addSubCategoryAsync', async (payload, { getState }) => {
     //! addSubCategoryAsync({}) -> { name}
     const { serviceCategoryId } = getState().modal.modalProps; //! OK
-    console.log(`modalsprops serviceCategoryId `, serviceCategoryId);
-    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${serviceCategoryId}`), {
+    console.log(`modalsprops serviceCategoryId:`, serviceCategoryId);
+    const response = await fetch('http://127.0.0.1:5000/Add_Subcat/'+ `${serviceCategoryId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         //! payload : {name, color}
-        body: JSON.stringify({ name: payload.name }),
-    });
+        body: JSON.stringify({ name: payload.name })
+    })
 
     if (response.ok) {
         const { subCategory } = await response.json();
@@ -157,16 +157,16 @@ const servicesSlice = createSlice({
         //     let updatedCategories = prepend(action.payload, categories);
         //     state.serviceCategories = updatedCategories;
         // });
-        // builder.addCase(addSubCategoryAsync.pending, (state, action) => {
-        //     console.log('addSubCategoryAsync pending');
-        // });
-        // builder.addCase(addSubCategoryAsync.fulfilled, (state, action) => {
-        //     console.log('addSubCategoryAsync fulfilled');
-        //     let categories = state.serviceCategories;
-        //     let catIndex = categories.findIndex((item) => item._id === action.payload.category);
-        //     let updatedSubs = prepend(action.payload, categories[catIndex].subCategories);
-        //     if (catIndex != -1) state.serviceCategories[catIndex].subCategories = updatedSubs;
-        // });
+        builder.addCase(addSubCategoryAsync.pending, (state, action) => {
+            console.log('addSubCategoryAsync pending');
+        });
+        builder.addCase(addSubCategoryAsync.fulfilled, (state, action) => {
+            console.log('addSubCategoryAsync fulfilled');
+            let categories = state.serviceCategories;
+            let catIndex = categories.findIndex((item) => item._id === action.payload.category);
+            let updatedSubs = prepend(action.payload, categories[catIndex].subCategories);
+            if (catIndex != -1) state.serviceCategories[catIndex].subCategories = updatedSubs;
+        });
         // builder.addCase(addServiceAsync.pending, (state, action) => {
         //     console.log('addServiceAsync pending');
         // });
