@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { PlatformBaseUrl } from '../../../utils';
-import axios from 'axios'
+import axios from 'axios';
 
 const initialState = {
     isLoading: false,
@@ -77,15 +77,25 @@ export const addServiceAsync = createAsyncThunk('services/addServiceAsync', asyn
     // console.log(`servicesSlice - serviceCategoryId : `, serviceCategoryId);
     // console.log(`servicesSlice - payload: `, payload);
 
-    const response = await axios.post(PlatformBaseUrl.baseApiUrl(`/api/services/${categoryId}/${subCategoryId}`), payload.service);
-    // const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${categoryId}/${subCategoryId}`), {
-    //     method: 'POST',
-    //     // headers: {
-    //     //     'Content-Type': 'multipart/form-data',
-    //     // },
+    // const config = {
+    //     headers: {
+    //         // 'content-type': 'multipart/form-data',
+    //         'content-type': 'application/x-www-form-urlencoded',
+            
+    //     },
+    // };
 
-    //     body: JSON.stringify(payload.service),
-    // });
+    // const response = await axios.post(PlatformBaseUrl.baseApiUrl(`/api/services/${categoryId}/${subCategoryId}`), payload.service, config);
+
+    //! FETCH
+    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${categoryId}/${subCategoryId}`), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+
+        body: JSON.stringify(payload.service),
+    });
 
     // if (response.ok) {
     //     const { service } = await response.json();

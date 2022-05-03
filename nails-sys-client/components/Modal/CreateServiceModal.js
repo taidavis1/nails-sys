@@ -5,10 +5,7 @@ import {
     Dimensions,
     TextInput,
     TouchableOpacity,
-    requireNativeComponent,
-    ViewPropTypes,
     Platform,
-    Image,
 } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import React from 'react';
