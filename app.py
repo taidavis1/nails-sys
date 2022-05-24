@@ -18,19 +18,19 @@ marsh = Marshmallow(app)
 
 db = SQLAlchemy(app)
 
-# class Subcat(db.Model):
+class Subcat(db.Model):
     
-#     id = db.Column(db.Integer , primary_key = True)
+    id = db.Column(db.Integer , primary_key = True)
     
-#     sub_name = db.Column(db.String(50) , nullable = False)
-    
-#     color = db.Column(db.String(50) , nullable = False)
+    sub_name = db.Column(db.String(50) , nullable = False)
+        
+    category = db.Column(db.Integer , db.ForeignKey('category.id'))
 
-#     category = db.relationship('Category' , backref = 'category')
-    
-#     services = db.relationship('Services' , backref = 'services')
-    
-#     def __init__ (self , )
+    def __init__ (self , sub_name , category):
+        
+        self.sub_name = sub_name
+        
+        self.category = category
     
 class Category(db.Model):
     
@@ -39,10 +39,10 @@ class Category(db.Model):
     category_name = db.Column(db.String(50) , nullable = False)
     
     color = db.Column(db.String(50) , nullable = False)
-    
-    # subcategories = db.Column(db.Integer , db.ForeignKey('subcat.id'))
-    
+        
     services = db.relationship('Services' , backref = 'category')
+    
+    sub_cat = db.relationship('Subcat' , backref = 'subcat')
     
     def __init__ (self , category_name , color):
         
@@ -58,11 +58,11 @@ class Services(db.Model):
     
     name_cat = db.Column(db.Integer , db.ForeignKey('category.id'))
     
-    def __init__ (self , services, category):
+    def __init__ (self , services, name_cat):
         
         self.services = services
         
-        self.category = category
+        self.name_cat = name_cat 
                 
 class categorySchema(marsh.Schema):
     
@@ -92,7 +92,11 @@ def get_data():
     for i in category_list:
                 
         services_list = [j.services for j in i.services]
-                
+        
+        sub_cat = [k.sub_name for k in i.sub_cat]
+        
+        id_cat = [m.id for m in i.sub_cat]
+                    
         em_list.append({
             
             'id':i.id,
@@ -101,13 +105,20 @@ def get_data():
             
             'color': i.color,
             
-            'services': services_list
+            'services': services_list,
+            
+            'sub_cat': sub_cat,
+            
+            'id_cat' : id_cat
         })
+        
+    print(em_list)
                      
     return jsonify(em_list)
 
 @app.route('/Add_Category' , methods = ['POST'])
 def add_category():
+    
     category_name = request.json['name']
     
     color = request.json['color']
@@ -117,22 +128,22 @@ def add_category():
     db.session.add(cat_add)
     
     db.session.commit()
-    
-    print(cat_sche.jsonify(cat_add))
-    
-    return cat_sche.jsonify(cat_add)
-    
+        
+    return cat_sche.jsonify([cat_add])
 
-# @app.route('/get_data_services/<int:id>' , methods = ['GET'])
-# def get_data_services(id):
+
+@app.route('/Add_Subcat/<int:id>' , methods = ['POST'])
+def add_services(id):
     
-#     services = Product.query.filter_by(cat_id = id).all()
+    sub_name = request.json['name']
     
-#     list_json = pro_sche.dump(services)
+    subcat_add = Subcat(sub_name , id)
     
-#     print(list_json)
+    db.session.add(subcat_add)
     
-#     return jsonify(list_json)
+    db.session.commit()
+        
+    return services_sche.jsonify([subcat_add])
             
 ################################
 

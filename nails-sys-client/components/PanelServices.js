@@ -32,34 +32,34 @@ function PanelServices(props) {
         });
     };
 
-    //! SUBCATEGORIES => ALL
-    // if (props.selectedCat === 'all') {
-    //     let selectedCategories = props.serviceCategories;
-    //     selectedCategories.forEach((cat) => subCategories.push(...cat.subCategories));
-    //     // console.log(`PanelServices -> selectedCategories: `, subCategories);
-    //     if (props.selectedSubCat === 'all') {
-    //         subCategories.forEach((sub) => services.push(...sub.services));
-    //     } else {
-    //         //! ANCHOR same
-    //         let selectedSubCategory = subCategories?.find((sub) => sub._id === props.selectedSubCat);
-    //         services = selectedSubCategory?.services;
-    //     }
-    // } else {
-    //     let selectedCategory = props.serviceCategories.find((cat) => cat._id === props.selectedCat);
-    //     subCategories = selectedCategory?.subCategories;
+    // ! SUBCATEGORIES => ALL
+    if (props.selectedCat === 'all') {
+        let selectedCategories = props.serviceCategories;
+        selectedCategories.forEach((cat) => subCategories.push(...cat.subCategories));
+        // console.log(`PanelServices -> selectedCategories: `, subCategories);
+        if (props.selectedSubCat === 'all') {
+            subCategories.forEach((sub) => services.push(...sub.services));
+        }else {
+            //! ANCHOR same
+            let selectedSubCategory = subCategories?.find((sub) => sub.id_cat === props.selectedSubCat);
+            services = selectedSubCategory?.services;
+        }
+    } else {
+        let selectedCategory = props.serviceCategories.find((cat) => cat.id === props.selectedCat);
+        subCategories = selectedCategory?.subCategories;
 
-    //     if (props.selectedSubCat === 'all') {
-    //         subCategories?.forEach((sub) => services.push(...sub.services));
-    //         // console.log(`subsTotal: `, services);
-    //     } else {
-    //         //! ANCHOR Same
-    //         let selectedSubCategory = subCategories?.find((sub) => sub._id === props.selectedSubCat);
-    //         // console.log(`PanelServices -> selectedSubCategory: `, selectedSubCategory);
-    //         services = selectedSubCategory?.services;
-    //     }
-    // }
+        if (props.selectedSubCat === 'all') {
+            subCategories?.forEach((sub) => services.push(...sub.services));
+            // console.log(`subsTotal: `, services);
+        } else {
+            //! ANCHOR Same
+            let selectedSubCategory = subCategories?.find((sub) => sub.id_cat === props.selectedSubCat);
+            console.log(`PanelServices -> selectedSubCategory: `, selectedSubCategory);
+            services = selectedSubCategory?.services;
+        }
+    }
 
-    // console.log(`PanelServices -> subCategories: `, subCategories);
+    console.log(`PanelServices -> subCategories: `, subCategories);
 
     function renderPanelSubCat() {
         // const nCount = React.useRef(0);
@@ -71,16 +71,16 @@ function PanelServices(props) {
                     {subCategories &&
                         subCategories.map((item) => (
                             <SubCategoryItem
-                                key={item.id}
-                                title={item.name}
-                                index={item.id}
+                                key={item.id_cat}
+                                title={item.sub_cat}
+                                index={item.id_cat}
                                 activeIndex={props.selectedSubCat}
                                 colorButton="#151c47"
                                 // style={styles.subCategoryItem}
                                 style={styles.subCatItem}
                                 onPress={() => {
-                                    console.log(`subCatId: `, item.id);
-                                    props.setSelectedSubCat(item.id);
+                                    console.log(`subCatId: `, item.id_cat);
+                                    props.setSelectedSubCat(item.id_cat);
                                 }}
                             />
                         ))}
