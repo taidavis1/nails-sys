@@ -48,7 +48,7 @@ const ServicecCategoryDetailsScreen = (props) => {
         <View style={styles.container}>
             {selectedServiceCategory.services && (
                 <FlatList
-                    keyExtractor={(item) => item._id}
+                    keyExtractor={(item) => item.id}
                     data={formatData(selectedServiceCategory.services, numColumns)}
                     // data={categories}
                     style={styles.container}

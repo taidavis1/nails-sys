@@ -38,17 +38,16 @@ function PanelCategories(props) {
                     alwaysBounceVertical={false}
                     keyExtractor={(item) => item.id}
                     data={props.serviceCategories}
-                    renderItem={({ item }) => (
+                    renderItem={({ item}) => (
                         <ServiceCategoryItem
                             colorButton={item.color}
-                            name={item.name}
-                            // activeIndex={props.selectedCat}
+                            name={item.category_name}
+                            activeIndex={props.selectedCat}
                             index={item.id}
                             style={styles.catItem}
                             onPress={() => {
-                                console.log(`catItemId: `, item.id);
                                 props.setSelectedCat(item.id);
-                                props.setSelectedSubCat('all');
+                                // props.setSelectedSubCat('all');
                             }}
                         />
                     )}

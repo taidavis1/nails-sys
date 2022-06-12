@@ -3,6 +3,9 @@ import React from 'react';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { CommonActions } from '@react-navigation/native';
 
+//! logo
+import LogoNailsSys from '../assets/icons/LogoNailsSys';
+
 function CustomDrawerContent(props) {
     //! props: navigation, route, drawerItems, theme
     //! _props.navigation: NavigationContainer --> Stack.Navigator ~> Screen component={} -> navigation/MainDrawerNavigation --> CustomDrawerContent
@@ -55,7 +58,7 @@ function CustomDrawerContent(props) {
 
     function renderMainDrawer() {
         return (
-            <View>
+            <View style={{flex: 1}}>
                 <DrawerContentScrollView {...props}>
                     {props.drawerItems.map((parent) => (
                         <DrawerItem
@@ -165,8 +168,8 @@ function CustomDrawerContent(props) {
     return (
         <ScrollView style={[styles.drawerContainer, { backgroundColor: props.theme.colors.boxBackground }]}>
             <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-                <View style={styles.centered}>
-                    <Image source={{ uri: 'https://reactjs.org/logo-og.png' }} style={styles.logo} />
+                <View style={styles.logoContainer}>
+                    <LogoNailsSys width={100} height={100}/>
                 </View>
                 {mainDrawer ? renderMainDrawer() : renderFilteredItemsDrawer()}
             </SafeAreaView>
@@ -193,8 +196,9 @@ const styles = StyleSheet.create({
         flex: 1,
         zIndex: 1000,
     },
-    centered: {
+    logoContainer: {
         alignItems: 'center',
+        padding: 20
     },
     parentItem: {
         flexDirection: 'row',

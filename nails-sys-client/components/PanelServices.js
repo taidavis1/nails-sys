@@ -32,16 +32,15 @@ function PanelServices(props) {
         });
     };
 
-    // ! SUBCATEGORIES => ALL
+    //! SUBCATEGORIES => ALL
     if (props.selectedCat === 'all') {
         let selectedCategories = props.serviceCategories;
         selectedCategories.forEach((cat) => subCategories.push(...cat.subCategories));
-        // console.log(`PanelServices -> selectedCategories: `, subCategories);
         if (props.selectedSubCat === 'all') {
             subCategories.forEach((sub) => services.push(...sub.services));
-        }else {
+        } else {
             //! ANCHOR same
-            let selectedSubCategory = subCategories?.find((sub) => sub.id_cat === props.selectedSubCat);
+            let selectedSubCategory = subCategories?.find((sub) => sub.id === props.selectedSubCat);
             services = selectedSubCategory?.services;
         }
     } else {
@@ -53,13 +52,13 @@ function PanelServices(props) {
             // console.log(`subsTotal: `, services);
         } else {
             //! ANCHOR Same
-            let selectedSubCategory = subCategories?.find((sub) => sub.id_cat === props.selectedSubCat);
-            console.log(`PanelServices -> selectedSubCategory: `, selectedSubCategory);
+            let selectedSubCategory = subCategories?.find((sub) => sub.id === props.selectedSubCat);
+            // console.log(`PanelServices -> selectedSubCategory: `, selectedSubCategory);
             services = selectedSubCategory?.services;
         }
     }
 
-    console.log(`PanelServices -> subCategories: `, subCategories);
+    // console.log(`PanelServices -> subCategories: `, subCategories);
 
     function renderPanelSubCat() {
         // const nCount = React.useRef(0);
@@ -71,16 +70,16 @@ function PanelServices(props) {
                     {subCategories &&
                         subCategories.map((item) => (
                             <SubCategoryItem
-                                key={item.id_cat}
-                                title={item.sub_cat}
-                                index={item.id_cat}
+                                key={item.id}
+                                title={item.name}
+                                index={item.id}
                                 activeIndex={props.selectedSubCat}
                                 colorButton="#151c47"
                                 // style={styles.subCategoryItem}
                                 style={styles.subCatItem}
                                 onPress={() => {
-                                    console.log(`subCatId: `, item.id_cat);
-                                    props.setSelectedSubCat(item.id_cat);
+                                    console.log(`subCatId: `, item.id);
+                                    props.setSelectedSubCat(item.id);
                                 }}
                             />
                         ))}

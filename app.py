@@ -1,3 +1,8 @@
+from dataclasses import field, fields
+from email.policy import strict
+from pyexpat import model
+from select import select
+from unicodedata import category
 from flask import Flask , redirect , render_template , jsonify, url_for, request , flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -22,15 +27,19 @@ class Subcat(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
     
-    sub_name = db.Column(db.String(50) , nullable = False)
+    name = db.Column(db.String(50) , nullable = False)
         
     category = db.Column(db.Integer , db.ForeignKey('category.id'))
+    
+    services = db.relationship('Services' , backref = 'sub_services')
 
-    def __init__ (self , sub_name , category):
+    def __init__ (self , name , category , services):
         
-        self.sub_name = sub_name
+        self.name = name
         
         self.category = category
+        
+        self.services = services
     
 class Category(db.Model):
     
@@ -40,9 +49,9 @@ class Category(db.Model):
     
     color = db.Column(db.String(50) , nullable = False)
         
-    services = db.relationship('Services' , backref = 'category')
+    services_id = db.relationship('Services' , backref = 'cat_services')
     
-    sub_cat = db.relationship('Subcat' , backref = 'subcat')
+    subCategories = db.relationship('Subcat' , backref = 'subcat')
     
     def __init__ (self , category_name , color):
         
@@ -54,67 +63,92 @@ class Services(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
     
-    services = db.Column(db.String(50) , nullable = False)
+    name = db.Column(db.String(50) , nullable = False)
     
-    name_cat = db.Column(db.Integer , db.ForeignKey('category.id'))
+    display_name = db.Column(db.String(50) , nullable = False)
     
-    def __init__ (self , services, name_cat):
+    name = db.Column(db.String(50) , nullable = False)
+
+    price = db.Column(db.Integer , nullable = False)
+    
+    commision = db.Column(db.String(50) , nullable = False)
+    
+    color = db.Column(db.String(50) , nullable = False)
+
+    photo = db.Column(db.BLOB)
+
+    category = db.Column(db.Integer , db.ForeignKey('category.id'))
+    
+    subCategories = db.Column(db.Integer , db.ForeignKey('subcat.id'))
+    
+    def __init__ (self , name, display_name , price , commision , color , photo , category , subCategories):
         
-        self.services = services
+        self.name = name
         
-        self.name_cat = name_cat 
+        self.display_name = display_name 
+        
+        self.price = price
+        
+        self.commision = commision
+        
+        self.color = color
+        
+        self.photo = photo
+        
+        self.category = category
+        
+        self.subCategories = subCategories
+        
+class subcatSchema(marsh.SQLAlchemyAutoSchema):
+    
+    class Meta:
+        
+        model = Subcat
+        
+        load_instance = True
                 
-class categorySchema(marsh.Schema):
+class servicesSchema(marsh.SQLAlchemyAutoSchema):
     
     class Meta:
         
-        fields = ('id' , 'category_name' , 'color')
+        model = Services
         
-class servicesSchema(marsh.Schema):
+        load_instance = True
+
+                        
+class categorySchema(marsh.SQLAlchemyAutoSchema):
+    
+    subCategories = marsh.Nested(subcatSchema , many = True)
+    
+    services = marsh.Nested(servicesSchema , many = True)
     
     class Meta:
         
-        fields = ('id' ,'services' , 'name_cat')
+        model = Category
+        
+        load_instance = True
+
         
 cat_sche = categorySchema()
 
-cat_sche = categorySchema(many = True)
+cats_sche = categorySchema(many = True)
 
-services_sche = servicesSchema(many = True)
+service_sche = servicesSchema()
+
+services_sche = servicesSchema(many=True)
+
+sub_sche = subcatSchema()
+
+subs_sche = subcatSchema(many=True)
         
 @app.route('/get_data' , methods = ['GET'])
 def get_data():
-        
-    em_list =  []
-            
-    category_list = Category.query.all()
-    
-    for i in category_list:
                 
-        services_list = [j.services for j in i.services]
+    category_list = Category.query.all()
+            
+    all_data = cats_sche.dump(category_list)
         
-        sub_cat = [k.sub_name for k in i.sub_cat]
-        
-        id_cat = [m.id for m in i.sub_cat]
-                    
-        em_list.append({
-            
-            'id':i.id,
-            
-            'name':i.category_name,
-            
-            'color': i.color,
-            
-            'services': services_list,
-            
-            'sub_cat': sub_cat,
-            
-            'id_cat' : id_cat
-        })
-        
-    print(em_list)
-                     
-    return jsonify(em_list)
+    return jsonify(all_data)
 
 @app.route('/Add_Category' , methods = ['POST'])
 def add_category():
@@ -133,19 +167,37 @@ def add_category():
 
 
 @app.route('/Add_Subcat/<int:id>' , methods = ['POST'])
-def add_services(id):
+def add_subcat(id):
     
-    sub_name = request.json['name']
+    name = request.json['name']
     
-    subcat_add = Subcat(sub_name , id)
+    subcat_add = Subcat(name , id)
     
     db.session.add(subcat_add)
     
     db.session.commit()
         
     return services_sche.jsonify([subcat_add])
+
+@app.route('/Add_Services/<int:category>/<int:subcat>' , methods = ['POST'])
+
+def add_services(category , subcat):
+    
+    name = request.json['name']
+    
+    display_name = request.json['display']
+
+    commision = request.json['conmission']
+
+    price = request.json['price']
+
+    color = request.json['color']
+
+    photo = request.json['photo']
+
+    
             
-################################
+####################################################
 
 if __name__ == '__main__':
     

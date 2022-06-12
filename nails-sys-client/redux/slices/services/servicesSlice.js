@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 // import { PlatformBaseUrl } from '../../../utils';
+import axios from 'axios';
 
 const initialState = {
     isLoading: false,
@@ -62,28 +63,26 @@ export const addSubCategoryAsync = createAsyncThunk('services/addSubCategoryAsyn
 
 //! CREATE Service
 export const addServiceAsync = createAsyncThunk('services/addServiceAsync', async (payload, { getState }) => {
-    // const { serviceCategoryId, subCategoryId } = getState().modal.modalProps; //! OK
-    const { category, subCategory } = payload;
+    //! Try catch
+    const { subCategoryId, categoryId } = payload;
+    console.log(`categoryId: `, categoryId);
+    console.log(`subCategoryId: `, subCategoryId);
+    console.log(`payload`, payload);
 
-    // console.log(`servicesSlice - serviceCategoryId : `, serviceCategoryId);
-    // console.log(`servicesSlice - payload: `, payload);
-
-    const response = await fetch(PlatformBaseUrl.baseApiUrl(`/api/services/${category}/${subCategory}`), {
+    //! FETCH
+    const response = await fetch('http://127.0.0.1:5000/Add_Services/'+ `${categoryId}` + '/' + `${subCategoryId}`, {
         method: 'POST',
-        // headers: {
-        //     'Content-Type': 'application/json',
-        // },
         headers: {
             'Content-Type': 'multipart/form-data',
         },
 
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload.service),
     });
 
-    if (response.ok) {
-        const { service } = await response.json();
-        return { ...service, category: category };
-    }
+    // if (response.ok) {
+    //     const { service } = await response.json();
+    //     return { ...service, category: category };
+    // }
 });
 
 //! DELETE Service
@@ -163,42 +162,42 @@ const servicesSlice = createSlice({
         builder.addCase(addSubCategoryAsync.fulfilled, (state, action) => {
             console.log('addSubCategoryAsync fulfilled');
             let categories = state.serviceCategories;
-            let catIndex = categories.findIndex((item) => item._id === action.payload.category);
-            let updatedSubs = prepend(action.payload, categories[catIndex].subCategories);
-            if (catIndex != -1) state.serviceCategories[catIndex].subCategories = updatedSubs;
+            let catIndex = categories.findIndex((item) => item.id === action.payload.category);
+            let updatedSubs = prepend(action.payload, categories[catIndex].subCategory);
+            if (catIndex != -1) state.serviceCategories[catIndex].subCategory = updatedSubs;
         });
-        // builder.addCase(addServiceAsync.pending, (state, action) => {
-        //     console.log('addServiceAsync pending');
-        // });
-        // builder.addCase(addServiceAsync.fulfilled, (state, action) => {
-        //     console.log('addServiceAsync fulfilled');
-        //     let categories = state.serviceCategories;
-        //     let catIndex = categories.findIndex((item) => item._id === action.payload.category);
-        //     let subIndex = categories[catIndex].subCategories.findIndex((item) => item._id === action.payload.subCategory);
-        //     let updatedServices = prepend(action.payload, categories[catIndex].subCategories[subIndex].services);
-        //     if (catIndex != -1 && subIndex != -1) state.serviceCategories[catIndex].subCategories[subIndex].services = updatedServices;
-        // });
-        // builder.addCase(removeServiceAsync.pending, (state, action) => {
-        //     console.log('removeServiceAsync pending');
-        // });
-        // builder.addCase(removeServiceAsync.fulfilled, (state, action) => {
-        //     console.log('removeServiceAsync fulfilled');
-        //     // console.log(`action.payload: `, action.payload); //! return a Object of Service
-        //     let categories = state.serviceCategories;
-        //     let catIndex = categories.findIndex((item) => item._id === action.payload.category);
-        //     let updatedServices = categories[catIndex].services.filter((service) => service._id !== action.payload._id);
-        //     if (catIndex != -1) state.serviceCategories[catIndex].services = updatedServices;
-        // });
-        // builder.addCase(updateServiceAsync.pending, (state, action) => {
-        //     console.log('updateServiceAsync pending');
-        // });
-        // builder.addCase(updateServiceAsync.fulfilled, (state, action) => {
-        //     console.log('updateServiceAsync fulfilled');
-        //     let categories = state.serviceCategories;
-        //     let catIndex = categories.findIndex((item) => item._id === action.payload.category);
-        //     let updatedServices = categories[catIndex].services.map((service) => (service._id === action.payload._id ? action.payload : service));
-        //     if (catIndex != -1) state.serviceCategories[catIndex].services = updatedServices;
-        // });
+        builder.addCase(addServiceAsync.pending, (state, action) => {
+            console.log('addServiceAsync pending');
+        });
+        builder.addCase(addServiceAsync.fulfilled, (state, action) => {
+            console.log('addServiceAsync fulfilled');
+            let categories = state.serviceCategories;
+            let catIndex = categories.findIndex((item) => item.id === action.payload.category);
+            let subIndex = categories[catIndex].subCategories.findIndex((item) => item.id === action.payload.subCategory);
+            let updatedServices = prepend(action.payload, categories[catIndex].subCategories[subIndex].services);
+            if (catIndex != -1 && subIndex != -1) state.serviceCategories[catIndex].subCategories[subIndex].services = updatedServices;
+        });
+        builder.addCase(removeServiceAsync.pending, (state, action) => {
+            console.log('removeServiceAsync pending');
+        });
+        builder.addCase(removeServiceAsync.fulfilled, (state, action) => {
+            console.log('removeServiceAsync fulfilled');
+            // console.log(`action.payload: `, action.payload); //! return a Object of Service
+            let categories = state.serviceCategories;
+            let catIndex = categories.findIndex((item) => item._id === action.payload.category);
+            let updatedServices = categories[catIndex].services.filter((service) => service._id !== action.payload._id);
+            if (catIndex != -1) state.serviceCategories[catIndex].services = updatedServices;
+        });
+        builder.addCase(updateServiceAsync.pending, (state, action) => {
+            console.log('updateServiceAsync pending');
+        });
+        builder.addCase(updateServiceAsync.fulfilled, (state, action) => {
+            console.log('updateServiceAsync fulfilled');
+            let categories = state.serviceCategories;
+            let catIndex = categories.findIndex((item) => item._id === action.payload.category);
+            let updatedServices = categories[catIndex].services.map((service) => (service._id === action.payload._id ? action.payload : service));
+            if (catIndex != -1) state.serviceCategories[catIndex].services = updatedServices;
+        });
     },
 });
 
