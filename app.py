@@ -1,5 +1,6 @@
 from dataclasses import field, fields
 from email.policy import strict
+from logging import NullHandler
 from pyexpat import model
 from select import select
 from unicodedata import category
@@ -15,7 +16,7 @@ import random
 
 app = Flask(__name__ , template_folder='templates' , static_folder= 'static')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123giadinh@localhost/nailsapp'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:duykhanh12345@localhost/nailsapp'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -33,14 +34,12 @@ class Subcat(db.Model):
     
     services = db.relationship('Services' , backref = 'sub_services')
 
-    def __init__ (self , name , category , services):
+    def __init__ (self , name , category):
         
         self.name = name
         
         self.category = category
         
-        self.services = services
-    
 class Category(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
@@ -177,7 +176,7 @@ def add_subcat(id):
     
     db.session.commit()
         
-    return services_sche.jsonify([subcat_add])
+    return sub_sche.jsonify([subcat_add])
 
 @app.route('/Add_Services/<int:category>/<int:subcat>' , methods = ['POST'])
 

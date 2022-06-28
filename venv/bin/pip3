@@ -1,4 +1,4 @@
-#!/Users/taipham/Desktop/Projects/nails-sys/nails-sys/venv/bin/python3
+#!/Users/macbook/nails-app/nails-sys/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
