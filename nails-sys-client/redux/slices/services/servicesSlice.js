@@ -79,10 +79,10 @@ export const addServiceAsync = createAsyncThunk('services/addServiceAsync', asyn
         body: JSON.stringify(payload.service),
     });
 
-    // if (response.ok) {
-    //     const { service } = await response.json();
-    //     return { ...service, category: category };
-    // }
+    if (response.ok) {
+        const { service } = await response.json();
+        return { ...service, category: category };
+    }
 });
 
 //! DELETE Service

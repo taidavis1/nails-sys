@@ -33,14 +33,12 @@ class Subcat(db.Model):
     
     services = db.relationship('Services' , backref = 'sub_services')
 
-    def __init__ (self , name , category , services):
+    def __init__ (self , name , category):
         
         self.name = name
         
         self.category = category
-        
-        self.services = services
-    
+            
 class Category(db.Model):
     
     id = db.Column(db.Integer , primary_key = True)
@@ -49,7 +47,7 @@ class Category(db.Model):
     
     color = db.Column(db.String(50) , nullable = False)
         
-    services_id = db.relationship('Services' , backref = 'cat_services')
+    services = db.relationship('Services' , backref = 'services')
     
     subCategories = db.relationship('Subcat' , backref = 'subcat')
     
@@ -177,7 +175,7 @@ def add_subcat(id):
     
     db.session.commit()
         
-    return services_sche.jsonify([subcat_add])
+    return subs_sche.jsonify([subcat_add])
 
 @app.route('/Add_Services/<int:category>/<int:subcat>' , methods = ['POST'])
 
@@ -185,7 +183,7 @@ def add_services(category , subcat):
     
     name = request.json['name']
     
-    display_name = request.json['display']
+    display_name = request.json['displayName']
 
     commision = request.json['conmission']
 
@@ -193,9 +191,16 @@ def add_services(category , subcat):
 
     color = request.json['color']
 
-    photo = request.json['photo']
-
+    photo = request.get_data('photo')
+        
+    services_add = Services(name, display_name , price , commision , color , photo , category , subcat)
     
+    db.session.add(services_add)
+    
+    db.session.commit()
+    
+    return services_sche.jsonify([services_add])
+
             
 ####################################################
 

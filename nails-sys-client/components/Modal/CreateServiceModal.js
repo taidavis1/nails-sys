@@ -13,6 +13,7 @@ import theme from '../../themes/Light';
 import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
+import * as FS from "expo-file-system";
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -51,8 +52,6 @@ const CreateServiceModal = (props) => {
 
     const [photo, setPhoto] = React.useState({
         fileName: '',
-        height: 0,
-        width: 0,
         type: '',
         uri: '',
     });
@@ -63,9 +62,9 @@ const CreateServiceModal = (props) => {
 
     React.useEffect(() => {
         let categories = props.serviceCategories;
-        let arrCats = categories.map((cat) => ({ label: cat.name, value: cat._id }));
-        let catIndex = categories.findIndex((item) => item._id === valueCat);
-        let arrSubs = categories[catIndex].subCategories.map((sub) => ({ label: sub.name, value: sub._id }));
+        let arrCats = categories.map((cat) => ({ label: cat.category_name, value: cat.id }));
+        let catIndex = categories.findIndex((item) => item.id === valueCat);
+        let arrSubs = categories[catIndex].subCategories.map((sub) => ({ label: sub.name, value: sub.id }));
 
         setItemCats(arrCats);
         setItemSubs(arrSubs);
@@ -100,7 +99,7 @@ const CreateServiceModal = (props) => {
             requestMediaLibraryPermissions();
         }
     }, []);
-
+    
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -108,6 +107,7 @@ const CreateServiceModal = (props) => {
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
+            base64:true,
         });
         // console.log(`result Image: `, result);
         if (!result.cancelled) {
@@ -118,10 +118,9 @@ const CreateServiceModal = (props) => {
             let type = match ? `image/${match[1]}` : `image`;
             setPhoto({
                 fileName: fileName,
-                height: result.height,
-                width: result.width,
                 type: type,
                 uri: result.uri,
+                
             });
         }
     };
@@ -247,13 +246,13 @@ const CreateServiceModal = (props) => {
                     {/* {photo.uri && <Image source={{ uri: photo.uri }} style={styles.image} />} */}
                 </View>
             </View>
-            <View style={[inputControlStyles]}>
+            <View style={[inputControlStyles] , {zIndex: 2000}}>
                 <Text>Category:</Text>
-                <DropDownPicker open={openCat} setOpen={setOpenCat} value={valueCat} setValue={setValueCat} items={itemCats} />
+                <DropDownPicker  stype={{backgroundColor: '#000000', zIndex: 10100}} open={openCat} setOpen={setOpenCat} value={valueCat} setValue={setValueCat} items={itemCats} />
             </View>
-            <View style={[inputControlStyles]}>
+            <View style={[inputControlStyles] , {zIndex: 1000}}>
                 <Text>SubCategory:</Text>
-                <DropDownPicker open={openSub} setOpen={setOpenSub} value={valueSub} setValue={setValueSub} items={itemSubs} />
+                <DropDownPicker stype={{backgroundColor: '#000000', zIndex: 10100}} open={openSub} setOpen={setOpenSub} value={valueSub} setValue={setValueSub} items={itemSubs} />
             </View>
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => handleCreate()}>
@@ -297,6 +296,7 @@ const styles = StyleSheet.create({
     inputControl: {
         flex: 1,
         marginVertical: 5,
+        zIndex: 10,
     },
     inputControlSmall: {
         flex: 1,

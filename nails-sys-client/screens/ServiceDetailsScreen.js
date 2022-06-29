@@ -8,7 +8,7 @@ const ServiceDetailsScreen = (props) => {
     return (
         <View>
             <Text>ServiceDetailsScreen</Text>
-            <Text>ID: {service._id}</Text>
+            <Text>ID: {service.id}</Text>
             <Text>Name: {service.name}</Text>
             <Text>Price: {service.price}</Text>
             <Text>Description: {service.discription}</Text>

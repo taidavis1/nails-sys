@@ -48,7 +48,7 @@ function PanelServices(props) {
         subCategories = selectedCategory?.subCategories;
 
         if (props.selectedSubCat === 'all') {
-            subCategories?.forEach((sub) => services.push(...sub.services));
+            // subCategories?.forEach((sub) => services.push(...sub.services));
             // console.log(`subsTotal: `, services);
         } else {
             //! ANCHOR Same
@@ -78,7 +78,6 @@ function PanelServices(props) {
                                 // style={styles.subCategoryItem}
                                 style={styles.subCatItem}
                                 onPress={() => {
-                                    console.log(`subCatId: `, item.id);
                                     props.setSelectedSubCat(item.id);
                                 }}
                             />

@@ -14,7 +14,7 @@ const ServiceItem = (props) => {
                 }
                 <View style={{ flexDirection: 'row', flex: 1 }}>
                     <View style={{ flex: 1 }}>
-                        <Text style={[styles.itemText, { color: "black" }]}>{props?.title}</Text>
+                        <Text style={[styles.itemText, { color: "black" }]}>{props.title}</Text>
                     </View>
                     <View style={{ borderWidth: 1, width: '50%', height: '60%', backgroundColor: 'white', borderRadius: 5 }}>
                         {
@@ -26,7 +26,7 @@ const ServiceItem = (props) => {
                     {
                         //! PRICE
                     }
-                    <Text style={[styles.itemText, { color: "black" }]}>{props?.price}</Text>
+                    <Text style={[styles.itemText, { color: "black" }]}>{props.price}</Text>
                 </View>
             </View>
         </TouchableOpacity>
