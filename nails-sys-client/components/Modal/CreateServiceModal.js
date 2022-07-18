@@ -100,6 +100,13 @@ const CreateServiceModal = (props) => {
         }
     }, []);
     
+    uriToBase64 = async (uri) => {
+        let base64 = await FS.readAsStringAsync(uri, {
+          encoding: FS.EncodingType.Base64,
+        });
+        return base64;
+    };
+
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -111,18 +118,47 @@ const CreateServiceModal = (props) => {
         });
         // console.log(`result Image: `, result);
         if (!result.cancelled) {
-            let localUri = result.uri;
-            let fileName = localUri.split('/').pop();
-            // Infer the type of the image
-            let match = /\.(\w+)$/.exec(fileName);
-            let type = match ? `image/${match[1]}` : `image`;
-            setPhoto({
-                fileName: fileName,
-                type: type,
+            await this.toServer({
+                type: result.type,
+                base64: result.base64,
                 uri: result.uri,
-                
             });
+            // let localUri = result.uri;
+            // let fileName = localUri.split('/').pop();
+            // // Infer the type of the image
+            // let match = /\.(\w+)$/.exec(fileName);
+            // let type = match ? `image/${match[1]}` : `image`;
+            // setPhoto({
+            //     fileName: fileName,
+            //     type: type,
+            //     uri: result.uri,
+                
+            // });
         }
+
+        toServer = async (mediaFile) => {
+            let type = mediaFile.type;
+            let schema = "http://";
+            let host = "192.168.1.6";
+            let route = "";
+            let port = "5000";
+            let url = "";
+            let content_type = "";
+            type === "image"
+              ? ((route = "/image"), (content_type = "image/jpeg"))
+              : ((route = "/video"), (content_type = "video/mp4"));
+            url = schema + host + ":" + port + route;
+        
+            let response = await FS.uploadAsync(url, mediaFile.uri, {
+              headers: {
+                "content-type": content_type,
+              },
+              httpMethod: "POST",
+              uploadType: FS.FileSystemUploadType.BINARY_CONTENT,
+        });
+
+        console.log(response.body);
+
     };
 
     const handleChange = (name, type, value) => {
