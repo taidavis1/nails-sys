@@ -1,7 +1,10 @@
+from crypt import methods
 from dataclasses import field, fields
+from email.mime import image
 from email.policy import strict
 from pyexpat import model
 from select import select
+from turtle import color
 from unicodedata import category
 from flask import Flask , redirect , render_template , jsonify, url_for, request , flash
 from flask_sqlalchemy import SQLAlchemy
@@ -15,7 +18,7 @@ import random
 
 app = Flask(__name__ , template_folder='templates' , static_folder= 'static')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123giadinh@localhost/nailsapp'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:duykhanh12345@localhost/nailsapp'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -179,6 +182,40 @@ def add_subcat(id):
         
     return services_sche.jsonify([subcat_add])
 
+
+
+@app.route('/Add-photo', methods = ['POST'])
+
+def addPhoto():
+    
+    display_name = request.form.get('display_name')
+    
+    name = request.form.get('name')
+    
+    price = request.form.get('price')
+    
+    commision = request.form.get('commision')
+    
+    color = request.form.get('color')
+    
+    photo = request.files.get('image')
+    
+    category = request.form.get('category')
+    
+    subCategories = request.form.get('subCategories')
+    
+    photo.save(os.path.join("/Users/macbook/nails-app/nails-sys/nails-sys-client/images", name + ".jpeg"))
+    
+    service_photo = Services(display_name, name, price, commision, color, photo, category, subCategories)
+    
+    db.session.add(service_photo)
+    
+    db.session.commit()
+    
+    return jsonify('success!!!')
+
+
+
 @app.route('/Add_Services/<int:category>/<int:subcat>' , methods = ['POST'])
 
 def add_services(category , subcat):
@@ -194,6 +231,8 @@ def add_services(category , subcat):
     color = request.json['color']
 
     photo = request.json['photo']
+
+######## ADD IMAGE TO DATABASE FROM FE
 
     
             

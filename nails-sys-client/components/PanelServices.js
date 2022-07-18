@@ -164,14 +164,31 @@ function PanelServices(props) {
         );
     }
 
-    const choosePhoto = () => {
-        ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            cropping: true
-          }).then(image => {
-            console.log(image);
-          });
+    const uploadPhoto = () => {
+        let photo = { uri: image };
+        let formdata = new FormData();
+        
+        formdata.append("display_name", "new image");
+        formdata.append("name", "nguyenduykhanh2");
+        formdata.append("price", 88);
+        formdata.append("commision", "nguyenduykhanh2");
+        formdata.append("color", "yellow");
+        formdata.append("image", {uri: image, name: 'image.jpg', type: 'image/jpeg'});
+        formdata.append("category", 2);
+        formdata.append("subCategories", 2);
+        //Image type can be image/png 
+        
+        fetch('http://127.0.0.1:5000/Add-photo',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formdata
+          }).then(response => {
+            console.log("image uploaded")
+          }).catch(err => {
+            console.log(err)
+          })
     }
 
     const [HasGalleryPermission, setHasGalleryPermission] = React.useState(null);
@@ -210,7 +227,7 @@ function PanelServices(props) {
             //         keyExtractor={(item, index) => `${item._id}-${index}`}
             //         numColumns={numColumns}
             //     />
-            // )
+            // ),
             <ScrollView style={styles.ServiceView}>
                 {image && <Image source={{uri: image}} style={{flex:1/5, height: 300, width:300}} />}
                 <TouchableOpacity 
@@ -218,6 +235,12 @@ function PanelServices(props) {
                     onPress={() => pickImage()}
                 >
                     <Text style={styles.TextContent}>Add Photo</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.ButtonContent}
+                    onPress={() => uploadPhoto()}
+                >
+                    <Text style={styles.TextContent}>Upload Photo</Text>
                 </TouchableOpacity>
 
             </ScrollView>
