@@ -1,5 +1,6 @@
-import { StyleSheet, ScrollView, View, FlatList, Dimensions, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, FlatList, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
+
 import { connect } from 'react-redux';
 
 //! imp Comps
@@ -10,6 +11,8 @@ import SubCategoryItem from './SubCategoryItem';
 import { showModal } from '../redux/slices/modal/modalSlice';
 
 import IconPlusOutline from '../assets/icons/IconPlusOutline';
+
+import * as ImagePicker from 'expo-image-picker';
 
 function PanelServices(props) {
     //! props: subCategories
@@ -161,16 +164,63 @@ function PanelServices(props) {
         );
     }
 
+    const choosePhoto = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+          }).then(image => {
+            console.log(image);
+          });
+    }
+
+    const [HasGalleryPermission, setHasGalleryPermission] = React.useState(null);
+    const [image, setImage] = React.useState(null);
+
+    React.useEffect(() => {
+        (async () => {
+            const GalleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            setHasGalleryPermission(GalleryStatus === 'granted');
+
+        })();
+    },[]);
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4,3],
+            quality: 1,
+        });
+        console.log(result);
+        if (!result.cancelled){
+            setImage(result.uri);
+        };
+        if (HasGalleryPermission === false){
+            return <Text>No access to library of device</Text>
+        };
+    }
+
     function renderPanelServices() {
         return (
-            services && (
-                <FlatList
-                    data={formatData(services, numColumns)}
-                    renderItem={(data) => renderServiceItem(data.item)}
-                    keyExtractor={(item, index) => `${item._id}-${index}`}
-                    numColumns={numColumns}
-                />
-            )
+            // services && (
+            //     <FlatList
+            //         data={formatData(services, numColumns)}
+            //         renderItem={(data) => renderServiceItem(data.item)}
+            //         keyExtractor={(item, index) => `${item._id}-${index}`}
+            //         numColumns={numColumns}
+            //     />
+            // )
+            <ScrollView style={styles.ServiceView}>
+                {image && <Image source={{uri: image}} style={{flex:1/5, height: 300, width:300}} />}
+                <TouchableOpacity 
+                    style={styles.ButtonContent}
+                    onPress={() => pickImage()}
+                >
+                    <Text style={styles.TextContent}>Add Photo</Text>
+                </TouchableOpacity>
+
+            </ScrollView>
         );
     }
 
@@ -209,6 +259,28 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         borderRadius: 10,
     },
+    ButtonContent: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: 'black',
+        width: 250,
+        marginTop: 20,
+    },
+    TextContent: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: 'white',
+    },
+    ServiceView:{
+        marginTop: 20,
+        flex:1,
+    }
 });
 
 const mapStateToProps = (state) => {
