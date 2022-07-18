@@ -169,9 +169,9 @@ function PanelServices(props) {
         let formdata = new FormData();
         
         formdata.append("display_name", "new image");
-        formdata.append("name", "nguyenduykhanh2");
+        formdata.append("name", "nguyenduykhanh8");
         formdata.append("price", 88);
-        formdata.append("commision", "nguyenduykhanh2");
+        formdata.append("commision", "nguyenduykhanh8");
         formdata.append("color", "yellow");
         formdata.append("image", {uri: image, name: 'image.jpg', type: 'image/jpeg'});
         formdata.append("category", 2);
